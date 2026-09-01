@@ -1,0 +1,1227 @@
+:root {
+    --primary: #00843d;
+    --primary-dark: #00632e;
+    --primary-soft: #eafaf1;
+    --text: #1a2a21;
+    --gray: #6d7c74;
+    --white: #ffffff;
+    --milk-solid: #f0f2f0;
+    --section-2-bg: #f0f2f0;
+    --footer-bg: #1a2a21;
+    --sombra: #e0dada;
+    --subCard: #ffffff;
+    --borda-bento: rgba(0, 132, 61, 0.08);
+    --shadow-soft: 0 1px 3px rgba(0, 0, 0, 0.05);
+    --bento-fundo: #ffffff;
+    --mat: black;
+}
+
+/* Cores do Tema Escuro */
+[data-theme="dark"] {
+    --white: black;
+    /* Fundo da Section 1 */
+    --milk-solid: #1e1e1e;
+    /* Fundo dos Cards e Section 2 */
+    --section-2-bg: #1e1e1e;
+    --text: #f0f2f0;
+    /* Texto principal */
+    --gray: #a0a0a0;
+    /* Texto secundário */
+    --primary-soft: #1a3326;
+    /* Hover dos cards no modo escuro */
+    --border-color: var(--primary);
+    --sombra: none;
+    --subCard: #1e1e1e;
+    --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.4);
+    --borda-bento: none;
+    --bento-fundo: #1e1e1e;
+    --mat: white;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('assets/fonts/Poppins-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('assets/fonts/Poppins-Bold.ttf') format('truetype');
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    color: var(--text);
+    background-color: var(--white);
+    overflow-x: hidden;
+}
+
+
+/* ==========================================================================
+   NAVEGAÇÃO SUPERIOR
+   ========================================================================== */
+.nav-topo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.6);
+    /* Transparência base branca */
+    backdrop-filter: blur(15px) saturate(180%);
+    /* O segredo do vidro */
+    -webkit-backdrop-filter: blur(15px) saturate(180%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(0, 132, 61, 0.08);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="dark"] .nav-topo {
+    background: #1a1a1ad3;
+    border-bottom: 1px solid #333;
+}
+
+.nav-logo {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: -0.3px;
+}
+
+.matClinica {
+    color: var(--mat);
+}
+
+/* ==========================================================================
+   BOTÃO HAMBURGER (Animado)
+   ========================================================================== */
+.btn-hamburger {
+    width: 40px;
+    height: 40px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    z-index: 2000;
+    position: relative;
+}
+
+.btn-hamburger span {
+    display: block;
+    width: 24px;
+    height: 2.5px;
+    background: var(--text);
+    border-radius: 3px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: center;
+}
+
+/* Animação do Hamburger → X */
+.btn-hamburger.ativo span:nth-child(1) {
+    transform: translateY(7.5px) rotate(45deg);
+}
+
+.btn-hamburger.ativo span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+}
+
+.btn-hamburger.ativo span:nth-child(3) {
+    transform: translateY(-7.5px) rotate(-45deg);
+}
+
+/* ==========================================================================
+   MENU OVERLAY (70% ESCURO - SEM FUNDO BRANCO ATRÁS)
+   ========================================================================== */
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 1500;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.menu-overlay.ativo {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ==========================================================================
+   MENU LATERAL (SEM FUNDO BRANCO - APENAS ITENS FLUTUANDO)
+   ========================================================================== */
+.menu-lateral {
+    position: fixed;
+    top: 0;
+    right: -270px;
+    width: 250px;
+    height: 100%;
+    z-index: 1600;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding: 20px 12px;
+    gap: 6px;
+    /* SEM background! Transparente! */
+    background: transparent;
+}
+
+.menu-lateral.ativo {
+    right: 0;
+}
+
+/* ==========================================================================
+   CABEÇALHO DO MENU (Ícone + Nome - Flutuando)
+   ========================================================================== */
+.menu-header {
+    padding: 10px 4px 20px;
+    text-align: center;
+    /* SEM background! */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    margin-bottom: 10px;
+}
+
+.menu-header-icon {
+    width: 56px;
+    height: 56px;
+    background: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    color: white;
+    margin: 0 auto 12px;
+}
+
+.menu-header h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 4px;
+}
+
+.menu-header p {
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* ==========================================================================
+   ITENS DO MENU (Fundo cinza, padding, border-radius 12px)
+   ========================================================================== */
+.menu-items {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0.5rem;
+    /* Padding como pediu */
+    text-decoration: none;
+    color: grey;
+    border-radius: 20px;
+    /* Border-radius como pediu */
+    background: var(--subCard);
+    /* Fundo cinza como pediu */
+    transition: all 0.25s ease;
+    position: relative;
+    font-weight: 500;
+    width: fit-content;
+}
+
+
+
+.menu-item-icon {
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    color: grey;
+    flex-shrink: 0;
+}
+
+.menu-header-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+
+.menu-item span {
+    flex: 1;
+    font-size: 0.95rem;
+}
+
+.menu-item-arrow {
+    font-size: 1.1rem;
+    transition: 0.2s;
+    color: grey;
+}
+
+.menu-item:hover .menu-item-arrow {
+    opacity: 1;
+    transform: translateX(3px);
+}
+
+.contacto {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0.5rem;
+}
+
+.contacto a {
+    text-decoration: none;
+}
+
+.contacto i {
+    border: solid 2px white;
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    background: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+    flex-shrink: 0;
+}
+
+/* ==========================================================================
+   RODAPÉ DO MENU (Transparente)
+   ========================================================================== */
+.menu-footer {
+    padding: 20px 4px;
+    text-align: right;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    opacity: 0.6;
+    font-size: 0.75rem;
+    margin-top: auto;
+    /* SEM background! */
+    background: transparent;
+}
+
+.menu-footer small {
+    display: block;
+    line-height: 1.8;
+    color: white;
+}
+
+/* ==========================================================================
+   SCROLLBAR DO MENU
+   ========================================================================== */
+.menu-lateral::-webkit-scrollbar {
+    width: 4px;
+}
+
+.menu-lateral::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+
+
+
+.label-ferramentas {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.linha-decorativa {
+    width: 60px;
+    height: 4px;
+    background: var(--primary);
+    margin: 0 auto 40px;
+    border-radius: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* --- BENTO GRID SYSTEM --- */
+.section-bento {
+    padding: 80px 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: auto; /* ← auto em vez de fixo */
+    gap: 15px;
+}
+
+.bento-item {
+    background: var(--bento-fundo);
+    border: none; 
+    border-radius: 28px;
+    padding: 1.5rem;
+    text-decoration: none;
+    color: var(--text);
+    position: relative;
+    overflow: visible; /* ← Garante que nada é cortado */
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    box-shadow: var(--shadow-soft);
+    height: auto; /* ← Altura automática */
+    min-height: 130px; /* ← Altura mínima, mas pode crescer */
+}
+
+.bento-item i {
+    font-size: 2.2rem;
+    color: var(--primary);
+    margin-bottom: 12px;
+    flex-shrink: 0;
+}
+
+.bento-item h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    line-height: 1.3;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto; /* ← Quebra palavras longas se necessário */
+}
+
+.bento-item p {
+    font-size: 0.85rem;
+    color: var(--gray);
+    line-height: 1.4;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+}
+
+.bento-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow: visible;
+}
+
+.bento-text {
+    overflow: visible;
+    width: 100%;
+}
+
+/* Variações de Tamanho */
+.card-grande {
+    grid-column: span 2;
+    grid-row: span 2;
+    background: var(--primary-soft);
+    min-height: 320px; /* Altura mínima, pode crescer */
+}
+
+.card-medio,
+.card-largo {
+    grid-column: span 2;
+    grid-row: span 1;
+    min-height: 160px;
+}
+
+.card-quadrado {
+    grid-column: span 1;
+    grid-row: span 1;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 140px;
+}
+
+.card-quadrado i {
+    font-size: 2rem;
+    margin-bottom: 8px;
+}
+
+.card-quadrado span {
+    font-size: 0.85rem;
+    font-weight: 600;
+    word-wrap: break-word;
+    max-width: 100%;
+    padding: 0 8px;
+    line-height: 1.3;
+}
+
+.bento-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: var(--primary);
+    color: white;
+    font-size: 0.7rem;
+    padding: 5px 12px;
+    border-radius: 50px;
+    font-weight: 700;
+}
+
+
+
+
+
+
+/* style.css - Adicione/Substitua estas regras */
+
+/* --- GRUPO DE QUADRADOS (empilhados verticalmente) --- */
+.bento-quadrado-group {
+    display: contents; /* Permite que os filhos participem da grid diretamente */
+}
+
+/* No mobile, agrupamos os quadrados para ficarem empilhados */
+@media (max-width: 768px) {
+    .bento-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+
+    /* Cards grandes ocupam 3 colunas */
+    .card-grande {
+        grid-column: span 3;
+        grid-row: span 1;
+        min-height: 200px;
+    }
+
+    /* Cards médios e largos ocupam 2 colunas */
+    .card-medio,
+    .card-largo {
+        grid-column: span 2;
+        grid-row: span 1;
+        min-height: 140px;
+    }
+
+    /* Quadrados: cada um ocupa 1 coluna, mas empilhados verticalmente */
+    .card-quadrado {
+        grid-column: span 1;
+        min-height: 80px;
+        height: auto;
+        padding: 12px 8px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border-radius: 16px;
+        transition: all 0.3s ease;
+    }
+
+    .card-quadrado i {
+        font-size: 1.6rem;
+        margin-bottom: 4px;
+    }
+
+    .card-quadrado span {
+        font-size: 0.75rem;
+        font-weight: 600;
+        line-height: 1.2;
+    }
+
+    /* O grupo de quadrados ocupa a última coluna */
+    .bento-quadrado-group {
+        display: grid;
+        grid-template-rows: 1fr 1fr;
+        gap: 10px;
+        grid-column: span 1;
+        grid-row: span 1;
+    }
+
+    /* Os quadrados dentro do grupo perdem o grid-column: span 1 automático */
+    .bento-quadrado-group .card-quadrado {
+        grid-column: auto;
+        min-height: 60px;
+    }
+}
+
+/* Desktop (>= 769px) - mantém o layout original */
+@media (min-width: 769px) {
+    .bento-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+    }
+
+    .card-grande {
+        grid-column: span 2;
+        grid-row: span 2;
+        min-height: 320px;
+    }
+
+    .card-medio,
+    .card-largo {
+        grid-column: span 2;
+        grid-row: span 1;
+        min-height: 160px;
+    }
+
+    .card-quadrado {
+        grid-column: span 1;
+        grid-row: span 1;
+        min-height: 140px;
+        padding: 1.5rem;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .bento-quadrado-group {
+        display: contents; /* No desktop, comportam-se como elementos individuais da grid */
+    }
+
+    .bento-quadrado-group .card-quadrado {
+        grid-column: span 1;
+        min-height: 140px;
+    }
+}
+
+/* Melhorias visuais gerais */
+.bento-item {
+    border-radius: 24px;
+    padding: 1.5rem;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    background: var(--bento-fundo);
+    border: 1px solid var(--borda-bento);
+    box-shadow: var(--shadow-soft);
+}
+
+
+
+[data-theme="dark"] .bento-item:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* Badge mais elegante */
+.bento-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: var(--primary);
+    color: white;
+    font-size: 0.65rem;
+    padding: 4px 14px;
+    border-radius: 50px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    box-shadow: 0 4px 12px rgba(0, 132, 61, 0.25);
+}
+
+/* Ícones com mais personalidade */
+.bento-item i {
+    font-size: 2.2rem;
+    color: var(--primary);
+    margin-bottom: 12px;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+}
+
+.bento-item:hover i {
+    transform: scale(1.08);
+}
+
+/* Ajuste de texto para melhor legibilidade */
+.bento-item h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+    line-height: 1.3;
+}
+
+.bento-item p {
+    font-size: 0.85rem;
+    color: var(--gray);
+    line-height: 1.5;
+    opacity: 0.9;
+}
+
+/* --- RESPONSIVIDADE FINA (mobile pequeno) --- */
+@media (max-width: 480px) {
+    .bento-grid {
+        gap: 8px;
+    }
+
+    .card-grande {
+        min-height: 100px;
+        padding: 1.2rem;
+    }
+
+    .card-medio,
+    .card-largo {
+        min-height: 110px;
+        padding: 1rem;
+    }
+
+    .card-quadrado {
+        min-height: 65px;
+        padding: 8px 6px;
+        border-radius: 23px;
+    }
+
+    .card-quadrado i {
+        font-size: 1.3rem;
+    }
+
+    .card-quadrado span {
+        font-size: 0.65rem;
+    }
+
+    .bento-badge {
+        font-size: 0.55rem;
+        padding: 3px 10px;
+        top: 10px;
+        right: 10px;
+    }
+
+    .bento-item h3 {
+        font-size: 0.95rem;
+    }
+
+    .bento-item p {
+        font-size: 0.75rem;
+    }
+
+    .bento-item i {
+        font-size: 1.6rem;
+        margin-bottom: 8px;
+    }
+
+    .label-ferramentas {
+        font-size: 1.4rem;
+    }
+
+    .linha-decorativa {
+        width: 40px;
+        margin-bottom: 24px;
+    }
+}
+
+
+
+
+
+
+/* Garantia para textos extremamente longos */
+.bento-item p strong,
+.bento-item p b {
+    white-space: normal;
+    word-break: break-word;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* --- SECTION 2: INFO --- */
+.section-info {
+    background-color: var(--section-2-bg);
+    padding: 100px 20px 80px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.grid-info {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 65px 30px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.info-box {
+    background: var(--white);
+    padding: 40px 30px 30px;
+    border-radius: 20px;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+.floating-icon {
+    width: 60px;
+    height: 60px;
+    background: var(--primary);
+    color: var(--white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    position: absolute;
+    top: -30px;
+    left: 20px;
+    box-shadow: 0 8px 20px rgba(0, 132, 61, 0.3);
+    border: 5px solid var(--section-2-bg);
+}
+
+.info-box h3 {
+    margin-bottom: 12px;
+    font-size: 1.25rem;
+    padding-top: 10px;
+}
+
+.info-box p {
+    font-size: 1rem;
+    color: var(--gray);
+    line-height: 1.6;
+}
+
+.footer-moderno {
+    background-color: #1a2a21;
+    /* Verde escuro profissional */
+    color: #ffffff;
+    padding: 60px 20px 20px;
+    margin-top: 50px;
+    text-align: center;
+}
+
+[data-theme="dark"] .footer-moderno {
+    background-color: #0a0a0a;
+}
+
+.footer-static {
+    background-color: #f8faf9;
+    /* Cinza muito claro, quase branco */
+    border-top: 1px solid #e0e6e3;
+    padding: 40px 20px 20px;
+    color: #4a5a51;
+}
+
+[data-theme="dark"] .footer-static {
+    background-color: #161616;
+    border-top: 1px solid #2a2a2a;
+    color: #a0a0a0;
+}
+
+.footer-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.footer-column {
+    flex: 1;
+    min-width: 250px;
+}
+
+.footer-column h3 {
+    color: var(--primary);
+    margin-bottom: 12px;
+    font-size: 1.3rem;
+}
+
+.footer-column h4 {
+    color: var(--text);
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.footer-column p {
+    font-size: 0.85rem;
+    line-height: 1.6;
+}
+
+.footer-column ul {
+    list-style: none;
+}
+
+.footer-column ul li {
+    margin-bottom: 5px;
+    background: var(--milk-solid);
+    border-radius: 20px;
+    padding: 0.5rem;
+    width: fit-content;
+}
+
+.footer-column ul li a {
+    color: inherit;
+    text-decoration: none;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.footer-column ul li a:hover {
+    color: var(--primary);
+}
+
+.social-row {
+    display: flex;
+    gap: 12px;
+}
+
+.footer-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    background: #eef2f0;
+    color: #1a2a21;
+    text-decoration: none;
+}
+
+[data-theme="dark"] .footer-icon {
+    background: #252525;
+    color: #fff;
+}
+
+.footer-icon.wa:hover {
+    background: #25D366;
+    color: white;
+}
+
+.footer-icon.mail:hover {
+    background: var(--primary);
+    color: white;
+}
+
+/* Disclaimer */
+.footer-disclaimer {
+    max-width: 800px;
+    margin: 40px auto 20px;
+    padding: 15px;
+    border-left: 3px solid var(--primary);
+    background: rgba(0, 132, 61, 0.05);
+    font-size: 0.75rem;
+    text-align: left;
+}
+
+.footer-copy {
+    text-align: center;
+    font-size: 0.75rem;
+    opacity: 0.6;
+    margin-top: 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    padding-top: 20px;
+}
+
+@media (min-width: 768px) {
+    .grid-ferramentas {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .grid-info {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .hero h1 {
+        font-size: 3.8rem;
+    }
+
+    /* Esconde o botão no desktop */
+
+    .ver-mais {
+        display: none;
+    }
+
+    /* Ferramentas ocultas sempre visíveis no desktop */
+    .ferramentas-ocultas {
+        opacity: 1 !important;
+        max-height: 500px !important;
+        margin: 20px auto 0 !important;
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Container das Categorias */
+.menu-categorias-horizontal {
+    display: flex;
+    justify-content: space-around;
+    max-width: 600px;
+    margin: 40px auto 10px;
+    padding: 0 10px;
+}
+
+.item-categoria {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 80px;
+}
+
+.icone-circulo {
+    width: 60px;
+    height: 60px;
+    background: var(--white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--primary);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    border: 2px solid transparent;
+}
+
+.item-categoria span {
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-top: 8px;
+
+}
+
+/* Estado Ativo */
+.item-categoria.ativo .icone-circulo {
+    border-color: var(--primary);
+    background: var(--primary-soft);
+    transform: translateY(-5px);
+}
+
+.item-categoria.ativo span {
+    color: var(--primary);
+}
+
+
+
+
+
+
+
+
+/* Esconde todos os grupos por padrão */
+.grupo-ferramentas {
+    display: none;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 15px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+/* Classe que ativa a exibição e animação */
+.grupo-ferramentas.ativo {
+    display: grid;
+    /* Ativa o grid quando a categoria for clicada */
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Painel de Ferramentas (Aberto) */
+.painel-ferramentas {
+    display: none;
+    /* Inicia oculto */
+    margin: 20px auto;
+    max-width: 800px;
+    border-top: 2px solid var(--primary);
+    padding: 25px;
+    position: relative;
+    animation: 0.4s;
+    display: block;
+    /* O painel pai fica sempre em bloco */
+    min-height: 150px;
+    /* Evita que o layout "pule" muito ao trocar */
+}
+
+/* A Seta/Indicador que se move */
+.indicador-origem {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid var(--primary);
+    transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Grelha de ferramentas dentro do painel */
+.grid-sub-ferramentas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 15px;
+}
+
+.sub-card {
+    background: var(--subCard);
+    padding: 15px;
+    border-radius: 15px;
+    text-decoration: none;
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    transition: 0.2s;
+    height: 5rem;
+    box-shadow: 0 4px 12px var(--sombra);
+}
+
+.sub-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.sub-card i {
+    color: var(--primary);
+    font-size: 1.2rem;
+}
+
+.sub-card b {
+    font-size: 0.8rem;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* ==========================================================================
+   FOOTER GLOBAL
+   ========================================================================== */
+.plain-footer {
+    width: 100%;
+    padding: 20px 15px;
+    background-color: transparent;
+    /* Sem fundo */
+    text-align: center;
+    margin-top: auto;
+    /* Cola no fundo se o conteúdo for curto */
+}
+
+.footer-inline {
+    display: flex;
+    flex-wrap: wrap;
+    /* Itens quebram linha em mobile */
+    justify-content: center;
+    align-items: center;
+    gap: 8px 16px;
+    /* Espaço entre itens */
+
+    font-size: 0.8rem;
+    color: grey;
+}
+
+.footer-inline a {
+    color: grey;
+    text-decoration: none;
+    font-weight: 500;
+    border-bottom: 1px dotted grey;
+    transition: color 0.2s, border-color 0.2s;
+}
+
+.footer-inline a:hover {
+    color: var(--primary-dark);
+    border-bottom-color: var(--primary-dark);
+}
+
+.footer-sep {
+    opacity: 0.4;
+}

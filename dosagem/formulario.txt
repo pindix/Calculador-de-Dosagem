@@ -1,0 +1,1755 @@
+nome: Amoxicilina|Ácido Clavulânico|Co-amoxiclav
+
+concentracao:
+  massa: 1.2 g
+  volume: 20 ml
+  instrucao: Dissolver o pó do frasco em 20 ml de água para preparação injetável ou cloreto de sódio a 0,9%, para injeção IV lenta (3 minutos) ou perfusão IV (30 minutos). NÃO DILUIR EM GLICOSE.
+
+condicaoClinica: Erisipela e Celulite
+  populacao: pediatrica
+  via: IV
+  idadeMaxima: 3 meses
+  doseMinima: 30
+  doseMaxima: 30
+  dosePadrao: 30
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 12 h
+
+condicaoClinica: Erisipela e Celulite
+  populacao: pediatrica
+  via: IV
+  idadeMinima: 3 meses
+  doseMinima: 20
+  doseMaxima: 30
+  dosePadrao: 20
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 8 h
+  notaExclusiva:
+    1. A dose máxima diária em crianças é de 3 g.
+
+condicaoClinica: Erisipela e Celulite
+  populacao: adulta
+  via: IV
+  doseMinima: 1
+  doseMaxima: 1
+  dosePadrao: 1
+  unidadeDose: g
+  intervalo: 8 h
+
+condicaoClinica: Infeções Necrotizantes da Pele e Tecidos Moles
+  populacao: pediatrica
+  via: IV
+  idadeMaxima: 3 meses
+  doseMinima: 50
+  doseMaxima: 50
+  dosePadrao: 50
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 12 h
+  notaExclusiva:
+    1. Administrar em associação com clindamicina.
+
+condicaoClinica: Infeções Necrotizantes da Pele e Tecidos Moles
+  populacao: pediatrica
+  via: IV
+  idadeMinima: 3 meses
+  pesoMaximo: 40 kg
+  doseMinima: 50
+  doseMaxima: 50
+  dosePadrao: 50
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 8 h
+  notaExclusiva:
+    1. A dose máxima diária em crianças é de 6 g.
+    2. Administrar em associação com clindamicina.
+
+condicaoClinica: Infeções Necrotizantes da Pele e Tecidos Moles
+  populacao: pediatrica
+  via: IV
+  pesoMinimo: 40 kg
+  doseMinima: 2
+  doseMaxima: 2
+  dosePadrao: 2
+  unidadeDose: g
+  intervalo: 8 h
+  notaExclusiva:
+    1. Administrar em associação com clindamicina.
+
+condicaoClinica: Infeções Necrotizantes da Pele e Tecidos Moles
+  populacao: adulta
+  via: IV
+  doseMinima: 2
+  doseMaxima: 2
+  dosePadrao: 2
+  unidadeDose: g
+  intervalo: 8 h
+  notaExclusiva:
+    1. Administrar em associação com clindamicina.
+
+condicaoClinica: Infeção Grave do Trato Genital Superior Pós-Parto
+  populacao: adulta
+  via: IV
+  doseMinima: 1
+  doseMaxima: 1
+  dosePadrao: 1
+  unidadeDose: g
+  intervalo: 8 h
+  notaExclusiva:
+    1. Administrar em associação com gentamicina.
+
+notaGeral:
+  1. Preparação para perfusão IV: diluir cada dose de amoxicilina/ácido clavulânico em 5 ml/kg de cloreto de sódio a 0,9% em crianças com menos de 20 kg e num saco de 100 ml de cloreto de sódio a 0,9% em crianças com 20 kg ou mais e em adultos.
+  2. Uma vez reconstituída, a solução deve ser utilizada imediatamente; eliminar qualquer frasco aberto não utilizado. Não misturar com outros medicamentos na mesma seringa ou saco de perfusão.
+  3. Não administrar a doentes com alergia a penicilinas, antecedentes de distúrbios hepáticos durante um tratamento anterior com co-amoxiclav, ou com mononucleose infeciosa.
+  4. Administrar com precaução em caso de alergia a cefalosporinas (risco de sensibilidade cruzada), insuficiência hepática ou insuficiência renal grave (reduzir a dose e aumentar o intervalo para 12 ou 24 horas). Não associar com metotrexato (risco de aumento da toxicidade deste).
+  5. Gravidez e aleitamento: sem contraindicação.
+  6. Duração do tratamento: erisipela/celulite (7 a 10 dias), infeções necrotizantes (14 dias, devendo evitar-se tratamentos superiores a 14 dias pelo risco de distúrbios hepáticos), infeção do trato genital superior (conforme resposta clínica). Transitar para a via oral assim que possível.
+  7. Referencia: MSF Essential Drugs Guidelines, Injectable drugs: AMOXICILLIN/CLAVULANIC ACID
+
+
+
+
+
+nome: Anfotericina B Convencional
+
+concentracao:
+  massa: 50 mg
+  volume: 10 ml
+  instrucao: Dissolver o pó do frasco em 10 ml de água para preparação injetável para obter uma solução concentrada contendo 5 mg/ml. Esta solução deve ser diluída em 500 ml de glicose a 5% para obter uma solução de 0,1 mg/ml para infusão IV lenta.
+
+condicaoClinica: Meningite Criptocócica
+  populacao: pediatrica
+  via: IV
+  doseMinima: 0.7
+  doseMaxima: 1
+  dosePadrao: 0.7
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 24 h
+  notaExclusiva:
+    1. Duração do tratamento (fase de indução): 1 semana se em associação com flucitosina, ou 2 semanas se em associação com fluconazol.
+
+condicaoClinica: Meningite Criptocócica
+  populacao: adulta
+  via: IV
+  doseMinima: 0.7
+  doseMaxima: 1
+  dosePadrao: 0.7
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 24 h
+  notaExclusiva:
+    1. Duração do tratamento (fase de indução): 1 semana se em associação com flucitosina, ou 2 semanas se em associação com fluconazol.
+
+condicaoClinica: Histoplasmose Grave ou Peniciliose Grave
+  populacao: pediatrica
+  via: IV
+  doseMinima: 0.7
+  doseMaxima: 1
+  dosePadrao: 0.7
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 24 h
+  notaExclusiva:
+    1. Duração do tratamento: 1 a 2 semanas para histoplasmose, ou 2 semanas para peniciliose.
+
+condicaoClinica: Histoplasmose Grave ou Peniciliose Grave
+  populacao: adulta
+  via: IV
+  doseMinima: 0.7
+  doseMaxima: 1
+  dosePadrao: 0.7
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 24 h
+  notaExclusiva:
+    1. Duração do tratamento: 1 a 2 semanas para histoplasmose, ou 2 semanas para peniciliose.
+
+notaGeral:
+  1. Preparação e administração: Utilizar exclusivamente glicose a 5% para diluição (a anfotericina B é incompatível com cloreto de sódio a 0,9% ou Ringer Lactato). Não misturar outros medicamentos na mesma linha. Proteger o frasco de infusão da luz durante a administração. Administrar em infusão IV lenta ao longo de 4 a 6 horas.
+  2. Proteção renal: Administrar 500 ml a 1 litro de cloreto de sódio a 0,9% ou Ringer Lactato antes de cada infusão para prevenir a toxicidade renal. Monitorizar a creatinina sérica (1 a 2 vezes por semana). Se a creatinina subir mais de 50%, aumentar a hidratação preventiva ou suspender o tratamento.
+  3. Suplementação (adultos): Assim que o doente conseguir deglutir, administrar suplementos orais de potássio (2 comprimidos de 8 mmol, 2 vezes ao dia) e magnésio (500 mg, 2 vezes ao dia) até ao final do tratamento.
+  4. Gestão de reações adversas: Em caso de reação de intolerância durante a administração (febre, calafrios, cefaleia), parar a infusão, administrar paracetamol ou um anti-histamínico e retomar a administração reduzindo a velocidade de infusão para metade.
+  5. Gravidez e aleitamento: Monitorizar a função renal no recém-nascido se administrado à mãe no último mês de gravidez. Evitar o aleitamento durante o tratamento, exceto se for de importância vital.
+  6. Conservação: O pó deve ser guardado no frigorífico (2 °C a 8 °C). Na ausência de frigorífico, pode ser mantido abaixo de 25 °C por no máximo 7 dias. A solução reconstituída conserva-se 24 horas no frigorífico. A solução para infusão deve ser utilizada imediatamente.
+  7. Referencia: MSF Essential Drugs Guidelines, Injectable drugs: AMPHOTERICIN B conventional
+
+
+
+
+nome: Anfotericina B Lipossómica
+
+concentracao:
+  massa: 50 mg
+  volume: 12 ml
+  instrucao: Dissolver o pó do frasco em 12 ml de água para preparação injetável para obter uma suspensão concentrada contendo 4 mg/ml. Diluir a dose necessária em glicose a 5% (50 ml, 250 ml ou 500 ml) utilizando o filtro fornecido com o frasco, para obter uma concentração final entre 0,2 e 2 mg/ml, para perfusão IV.
+
+condicaoClinica: Meningite Criptocócica
+  populacao: pediatrica
+  via: IV
+  idadeMinima: 1 mês
+  doseMinima: 3
+  doseMaxima: 3
+  dosePadrao: 3
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 24 h
+  notaExclusiva:
+    1. Duração do tratamento: 2 semanas.
+
+condicaoClinica: Meningite Criptocócica
+  populacao: adulta
+  via: IV
+  doseMinima: 3
+  doseMaxima: 3
+  dosePadrao: 3
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 24 h
+  notaExclusiva:
+    1. Duração do tratamento: 2 semanas.
+
+condicaoClinica: Histoplasmose Grave
+  populacao: pediatrica
+  via: IV
+  idadeMinima: 1 mês
+  doseMinima: 3
+  doseMaxima: 3
+  dosePadrao: 3
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 24 h
+  notaExclusiva:
+    1. Duração do tratamento: 2 semanas.
+
+condicaoClinica: Histoplasmose Grave
+  populacao: adulta
+  via: IV
+  doseMinima: 3
+  doseMaxima: 3
+  dosePadrao: 3
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 24 h
+  notaExclusiva:
+    1. Duração do tratamento: 2 semanas.
+
+condicaoClinica: Leishmaníase Visceral ou Mucocutânea
+  populacao: pediatrica
+  via: IV
+  idadeMinima: 1 mês
+  doseMinima: 15
+  doseMaxima: 30
+  dosePadrao: 15
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  notaExclusiva:
+    1. Seguir o protocolo recomendado, que varia de acordo com a região (dose exata, esquema de administração, etc.).
+    2. Os valores indicados representam a dose total acumulada (15 a 30 mg/kg).
+
+condicaoClinica: Leishmaníase Visceral ou Mucocutânea
+  populacao: adulta
+  via: IV
+  doseMinima: 15
+  doseMaxima: 30
+  dosePadrao: 15
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  notaExclusiva:
+    1. Seguir o protocolo recomendado, que varia de acordo com a região (dose exata, esquema de administração, etc.).
+    2. Os valores indicados representam a dose total acumulada (15 a 30 mg/kg).
+
+notaGeral:
+  1. A anfotericina B lipossómica é melhor tolerada e menos nefrotóxica do que a anfotericina B convencional.
+  2. Preparação e administração: Enxaguar o cateter IV com glicose a 5% antes de cada infusão. Não adicionar outros medicamentos no mesmo frasco ou saco de infusão; não utilizar a preparação se houver precipitação visível. Administrar em perfusão IV ao longo de 30 a 60 minutes (pode ser administrada ao longo de 2 horas se necessário para prevenir ou minimizar reações de intolerância).
+  3. Monitorização e ajuste de dose: Monitorizar a creatinina sérica e, se possível, os níveis de potássio sérico (1 a 2 vezes por semana) durante o tratamento; adaptar a terapia adjuvante (suplementação de potássio e magnésio) de acordo com os resultados. Se a função renal se deteriorar, reduzir a dose para metade durante alguns dias.
+  4. Não associar com medicamentos que causem hipocaliemia (furosemida, corticoides), medicamentos nefrotóxicos (amicacina, ciclosporina, tenofovir), digoxina ou zidovudine.
+  5. Gravidez e aleitamento: Verificar a presença de disfunção renal no recém-nascido se administrado durante o último mês de gravidez. Evitar o aleitamento durante o tratamento, exceto se for de importância vital.
+  6. Conservação: O pó deve ser guardado no frigorífico (2 °C a 8 °C) ou abaixo de 25 °C. As soluções reconstituída e de infusão mantêm-se no frigorífico (2 °C a 8 °C) durante no máximo 24 horas.
+  7. Referencia: MSF Essential Drugs Guidelines, Injectable drugs: AMPHOTERICIN B liposomal
+
+
+
+
+
+nome: Ampicilina
+
+concentracao:
+  massa: 500 mg
+  volume: 5 ml
+  instrucao: Dissolver o pó do frasco em 5 ml de água para preparação injetável. Preferir a administração por injeção IV lenta (3 a 5 minutos) ou por perfusão IV (30 minutos) em cloreto de sódio a 0,9% ou glicose a 5% para doses elevadas. Usar a via IM apenas se a administração IV correta não for possível. Em neonatos, administrar apenas por injeção IV lenta ou perfusão IV.
+.
+  massa: 1 g
+  volume: 5 ml
+  instrucao: Dissolver o pó do frasco em 5 ml de água para preparação injetável. Preferir a administração por injeção IV lenta (3 a 5 minutos) ou por perfusão IV (30 minutos) em cloreto de sódio a 0,9% ou glicose a 5% para doses elevadas. Usar a via IM apenas se a administração IV correta não for possível. Em neonatos, administrar apenas por injeção IV lenta ou perfusão IV.
+
+condicaoClinica: Infeções Bacterianas Graves
+  populacao: pediatrica
+  via: IV
+  pesoMaximo: 2 kg
+  idadeMaxima: 7 dias
+  doseMinima: 50
+  doseMaxima: 100
+  dosePadrao: 50
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 12 h
+
+condicaoClinica: Infeções Bacterianas Graves
+  populacao: pediatrica
+  via: IV
+  pesoMinimo: 2 kg
+  idadeMaxima: 7 dias
+  doseMinima: 50
+  doseMaxima: 100
+  dosePadrao: 50
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 8 h
+
+condicaoClinica: Infeções Bacterianas Graves
+  populacao: pediatrica
+  via: IV
+  idadeMinima: 8 dias
+  idadeMaxima: 1 mês
+  doseMinima: 50
+  doseMaxima: 100
+  dosePadrao: 50
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 8 h
+
+condicaoClinica: Infeções Bacterianas Graves
+  populacao: pediatrica
+  via: IV
+  idadeMinima: 1 mês
+  doseMinima: 50
+  doseMaxima: 100
+  dosePadrao: 50
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 8 h
+
+condicaoClinica: Infeções Bacterianas Graves
+  populacao: adulta
+  via: IV
+  doseMinima: 1
+  doseMaxima: 2
+  dosePadrao: 1
+  unidadeDose: g
+  intervalo: 6, 8 h
+
+condicaoClinica: Meningite Bacteriana
+  populacao: adulta
+  via: IV
+  doseMinima: 2
+  doseMaxima: 2
+  dosePadrao: 2
+  unidadeDose: g
+  intervalo: 4 h
+
+condicaoClinica: Antraz Cutâneo Grave
+  populacao: pediatrica
+  via: IV
+  idadeMinima: 1 mês
+  doseMinima: 50
+  doseMaxima: 50
+  dosePadrao: 50
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 6 h
+  notaExclusiva:
+    1. A dose máxima por injeção é de 3 g.
+    2. Administrar em associação com clindamicina.
+
+condicaoClinica: Antraz Cutâneo Grave
+  populacao: pediatrica
+  via: IV
+  idadeMinima: 1 mês
+  doseMinima: 65
+  doseMaxima: 65
+  dosePadrao: 65
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 8 h
+  notaExclusiva:
+    1. A dose máxima por injeção é de 4 g.
+    2. Administrar em associação com clindamicina.
+
+condicaoClinica: Antraz Cutâneo Grave
+  populacao: adulta
+  via: IV
+  doseMinima: 3
+  doseMaxima: 3
+  dosePadrao: 3
+  unidadeDose: g
+  intervalo: 6 h
+  notaExclusiva:
+    1. Administrar em associação com clindamicina.
+
+condicaoClinica: Antraz Cutâneo Grave
+  populacao: adulta
+  via: IV
+  doseMinima: 4
+  doseMaxima: 4
+  dosePadrao: 4
+  unidadeDose: g
+  intervalo: 8 h
+  notaExclusiva:
+    1. Administrar em associação com clindamicina.
+
+condicaoClinica: Infeção Grave do Trato Genital Superior Pós-Parto
+  populacao: adulta
+  via: IV
+  doseMinima: 1
+  doseMaxima: 2
+  dosePadrao: 1
+  unidadeDose: g
+  intervalo: 6, 8 h
+  notaExclusiva:
+    1. Administrar em associação com gentamicina.
+
+notaGeral:
+  1. Preparação para perfusão IV: diluir cada dose de ampicilina em 5 ml/kg de cloreto de sódio a 0,9% ou glicose a 5% em crianças com menos de 20 kg e num saco de 100 ml de cloreto de sódio a 0,9% ou glicose a 5% em crianças com 20 kg ou mais e em adultos.
+  2. Uma vez reconstituída, a solução deve ser utilizada imediatamente. Não misturar com outros medicamentos na mesma seringa ou saco de perfusão.
+  3. Não administrar a doentes com alergia a penicilinas ou com mononucleose infeciosa (risco de erupção cutânea).
+  4. Administrar com precaução em caso de alergia a cefalosporinas (risco de sensibilidade cruzada) ou insuficiência renal grave (reduzir a dose).
+  5. Gravidez e aleitamento: sem contraindicações.
+  6. Duração do tratamento: Transitar para a via oral assim que possível (com amoxicilina ou uma associação de antibacteriais, dependendo da indicação).
+  7. Referencia: MSF Essential Drugs Guidelines, Injectable drugs: AMPICILLIN
+
+
+
+
+
+nome: Artesunato
+
+concentracao:
+  massa: 60 mg
+  volume: 6 ml
+  instrucao: Reconstituição de 2 passos para via IV lenta (3 a 5 minutos) - Passo 1 (reconstituição) - Adicionar o conteúdo da ampola de 1 ml de bicarbonato de sódio a 5% ao frasco de pó. Agitar suavemente até o pó dissolver e a solução estar límpida. Passo 2 (diluição) - Adicionar 5 ml de cloreto de sódio a 0,9% ao frasco para obter 6 ml de solução contendo 10 mg/ml.
+.
+  massa: 60 mg
+  volume: 3 ml
+  instrucao: Reconstituição de 2 passos para via IM lenta - Passo 1 (reconstituição) - Adicionar o conteúdo da ampola de 1 ml de bicarbonato de sódio a 5% ao frasco de pó. Agitar suavemente até o pó dissolver e a solução estar límpida. Passo 2 (diluição) - Adicionar 2 ml de cloreto de sódio a 0,9% ao frasco para obter 3 ml de solução contendo 20 mg/ml.
+
+condicaoClinica: Malária Grave e Tratamento Inicial de Malária Não Complicada
+  populacao: pediatrica
+  via: IV
+  pesoMinimo: 6 kg
+  pesoMaximo: 20 kg
+  doseMinima: 3
+  doseMaxima: 3
+  dosePadrao: 3
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: ataque(12 h); manutencao(24 h)
+  notaExclusiva:
+    1. Crianças com menos de 6 kg: procurar aconselhamento especializado.
+
+condicaoClinica: Malária Grave e Tratamento Inicial de Malária Não Complicada
+  populacao: pediatrica
+  via: IM
+  pesoMinimo: 6 kg
+  pesoMaximo: 20 kg
+  doseMinima: 3
+  doseMaxima: 3
+  dosePadrao: 3
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: ataque(12 h); manutencao(24 h)
+  notaExclusiva:
+    1. Crianças com menos de 6 kg: procurar aconselhamento especializado.
+
+condicaoClinica: Malária Grave e Tratamento Inicial de Malária Não Complicada
+  populacao: pediatrica
+  via: IV
+  pesoMinimo: 20 kg
+  doseMinima: 2.4
+  doseMaxima: 2.4
+  dosePadrao: 2.4
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: ataque(12 h); manutencao(24 h)
+
+condicaoClinica: Malária Grave e Tratamento Inicial de Malária Não Complicada
+  populacao: pediatrica
+  via: IM
+  pesoMinimo: 20 kg
+  doseMinima: 2.4
+  doseMaxima: 2.4
+  dosePadrao: 2.4
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: ataque(12 h); manutencao(24 h)
+
+condicaoClinica: Malária Grave e Tratamento Inicial de Malária Não Complicada
+  populacao: adulta
+  via: IV
+  doseMinima: 2.4
+  doseMaxima: 2.4
+  dosePadrao: 2.4
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: ataque(12 h); manutencao(24 h)
+
+condicaoClinica: Malária Grave e Tratamento Inicial de Malária Não Complicada
+  populacao: adulta
+  via: IM
+  doseMinima: 2.4
+  doseMaxima: 2.4
+  dosePadrao: 2.4
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: ataque(12 h); manutencao(24 h)
+
+notaGeral:
+  1. Esquema de administração (sinalização de quando tomar): Administrar uma dose na admissão (H0), depois 12 horas após a admissão (H12), depois 24 horas após a admissão (H24) e, a seguir, uma vez por dia (a cada 24 h).
+  2. Administrar por pelo menos 24 horas (mínimo de 3 doses). Assim que o doente tolerar a via oral, transitar para um tratamento completo de 3 dias com uma associação à base de artemisinina (ACT). A primeira dose de ACT deve ser tomada 8 a 12 horas após a última injeção de artesunato. O tratamento parentérico total não deve exceder 7 dias.
+  3. NUNCA ADMINISTRAR EM PERFUSÃO (INFUSÃO) IV.
+  4. Reações adversas: Pode causar distúrbios gastrointestinais, tonturas, dor de cabeça, febre, dor muscular e articular, prurito. Raramente pode causar anemia hemolítica tardia (surgindo 2 a 3 semanas após o tratamento, especialmente em caso de hiperparasitemia e em crianças pequenas).
+  5. Gravidez e aleitamento: sem contraindicação.
+  6. A solução deve ser límpida; não utilizar se estiver turva ou com precipitado. Uma vez reconstituída, a solução deve ser utilizada imediatamente.
+  7. As formulações de 1 passo e de 2 passos de artesunato 60 mg são bioequivalentes e podem ser usadas de forma intercambiável, mas recomenda-se usar apenas uma formulação por doente durante o tratamento para evitar erros de preparação.
+  8. Referencia: MSF Essential Drugs Guidelines, Injectable drugs: ARTESUNATE
+
+
+
+
+nome: Artesunato (com solvente de arginina e bicarbonato de sódio)|Artesunato
+
+concentracao:
+  massa: 60 mg
+  volume: 3 ml
+  instrucao: Adicionar todo o conteúdo da ampola de solvente (3 ml) ao frasco de pó para obter 3 ml de solução contendo 20 mg de artesunato por ml. Agitar suavemente até o pó dissolver completamente. Utilizar apenas quando a solução estiver límpida. Administrar por via IV lenta (3 a 5 minutos) ou injeção IM lenta. NUNCA ADMINISTRAR EM PERFUSÃO IV.
+
+condicaoClinica: Malária Grave e Tratamento Inicial de Malária Não Complicada
+  populacao: pediatrica
+  via: IV
+  pesoMinimo: 6 kg
+  pesoMaximo: 20 kg
+  doseMinima: 3
+  doseMaxima: 3
+  dosePadrao: 3
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: ataque(12 h); manutencao(24 h)
+  notaExclusiva:
+    1. Crianças com menos de 6 kg: procurar aconselhamento especializado.
+
+condicaoClinica: Malária Grave e Tratamento Inicial de Malária Não Complicada
+  populacao: pediatrica
+  via: IM
+  pesoMinimo: 6 kg
+  pesoMaximo: 20 kg
+  doseMinima: 3
+  doseMaxima: 3
+  dosePadrao: 3
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: ataque(12 h); manutencao(24 h)
+  notaExclusiva:
+    1. Crianças com menos de 6 kg: procurar aconselhamento especializado.
+
+condicaoClinica: Malária Grave e Tratamento Inicial de Malária Não Complicada
+  populacao: pediatrica
+  via: IV
+  pesoMinimo: 20 kg
+  doseMinima: 2.4
+  doseMaxima: 2.4
+  dosePadrao: 2.4
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: ataque(12 h); manutencao(24 h)
+
+condicaoClinica: Malária Grave e Tratamento Inicial de Malária Não Complicada
+  populacao: pediatrica
+  via: IM
+  pesoMinimo: 20 kg
+  doseMinima: 2.4
+  doseMaxima: 2.4
+  dosePadrao: 2.4
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: ataque(12 h); manutencao(24 h)
+
+condicaoClinica: Malária Grave e Tratamento Inicial de Malária Não Complicada
+  populacao: adulta
+  via: IV
+  doseMinima: 2.4
+  doseMaxima: 2.4
+  dosePadrao: 2.4
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: ataque(12 h); manutencao(24 h)
+
+condicaoClinica: Malária Grave e Tratamento Inicial de Malária Não Complicada
+  populacao: adulta
+  via: IM
+  doseMinima: 2.4
+  doseMaxima: 2.4
+  dosePadrao: 2.4
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: ataque(12 h); manutencao(24 h)
+
+notaGeral:
+  1. Esquema de administração (sinalização de quando tomar): Administrar uma dose na admissão (H0), depois 12 horas após a admissão (H12), depois 24 horas após a admissão (H24) e, a seguir, uma vez por dia (a cada 24 h).
+  2. Administrar por pelo menos 24 horas (mínimo de 3 doses). Assim que o doente tolerar a via oral, transitar para um tratamento completo de 3 dias com uma associação à base de artemisinina (ACT). A primeira dose de ACT deve ser tomada 8 a 12 horas após a última injeção de artesunato. O tratamento parentérico total não deve exceder 7 dias.
+  3. NUNCA ADMINISTRAR EM PERFUSÃO (INFUSÃO) IV.
+  4. Reações adversas: Pode causar distúrbios gastrointestinais, tonturas, dor de cabeça, febre, dor muscular e articular, prurito. Raramente pode causar anemia hemolítica tardia (surgindo 2 a 3 semanas após o tratamento, especialmente em caso de hiperparasitemia e em crianças pequenas).
+  5. Gravidez e aleitamento: sem contraindicação.
+  6. A solução deve ser límpida; não utilizar se estiver turva ou com precipitado. Once reconstituted, a solução deve ser utilizada imediatamente.
+  7. As formulações de 1 passo e de 2 passos de artesunato 60 mg são bioequivalentes e podem ser usadas de forma intercambiável, mas recomenda-se usar apenas uma formulação por doente durante o tratamento para evitar erros de preparação.
+  8. Referencia: MSF Essential Drugs Guidelines, Injectable drugs: ARTESUNATE (with arginine and sodium bicarbonate solvent)
+
+
+
+nome: Atropina
+
+concentracao:
+  massa: 1 mg
+  volume: 1 ml
+.
+  massa: 0.5 mg
+  volume: 1 ml
+.
+  massa: 0.25 mg
+  volume: 1 ml
+
+condicaoClinica: Pré-medicação em Anestesia
+  populacao: pediatrica
+  via: SC, IV
+  doseMinima: 0.01
+  doseMaxima: 0.02
+  dosePadrao: 0.01
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: dose única
+
+condicaoClinica: Pré-medicação em Anestesia
+  populacao: adulta
+  via: SC, IV
+  doseMinima: 1
+  doseMaxima: 1
+  dosePadrao: 1
+  unidadeDose: mg
+  intervalo: dose única
+
+condicaoClinica: Espasmos do Trato Gastrointestinal
+  populacao: pediatrica
+  via: SC
+  idadeMinima: 2 anos
+  idadeMaxima: 6 anos
+  doseMinima: 0.25
+  doseMaxima: 0.25
+  dosePadrao: 0.25
+  unidadeDose: mg
+  intervalo: dose única
+
+condicaoClinica: Espasmos do Trato Gastrointestinal
+  populacao: pediatrica
+  via: SC
+  idadeMinima: 6 anos
+  doseMinima: 0.5
+  doseMaxima: 0.5
+  dosePadrao: 0.5
+  unidadeDose: mg
+  intervalo: dose única
+
+condicaoClinica: Espasmos do Trato Gastrointestinal
+  populacao: adulta
+  via: SC
+  doseMinima: 0.25
+  doseMaxima: 1
+  dosePadrao: 0.25
+  unidadeDose: mg
+  intervalo: 6 h
+  notaExclusiva:
+    1. Administrar se necessário, sem ultrapassar a dose máxima de 2 mg por dia.
+
+condicaoClinica: Intoxicação por Pesticidas Organofosforados
+  populacao: pediatrica
+  via: IM, IV
+  doseMinima: 0.02
+  doseMaxima: 0.05
+  dosePadrao: 0.02
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  notaExclusiva:
+    1. Administrar por via intramuscular ou injeção intravenosa lenta.
+
+condicaoClinica: Intoxicação por Pesticidas Organofosforados
+  populacao: adulta
+  via: IM, IV
+  doseMinima: 2
+  doseMaxima: 2
+  dosePadrao: 2
+  unidadeDose: mg
+  notaExclusiva:
+    1. Administrar por via intramuscular ou injeção intravenosa lenta.
+
+condicaoClinica: Prevenção dos Efeitos Bradicárdicos da Neostigmina
+  populacao: pediatrica
+  via: IV
+  doseMinima: 0.02
+  doseMaxima: 0.02
+  dosePadrao: 0.02
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: dose única
+  notaExclusiva:
+    1. Utilizar para prevenir os efeitos bradicárdicos da neostigmina quando esta é usada para reverter os efeitos de relaxantes musculares competitivos.
+
+condicaoClinica: Prevenção dos Efeitos Bradicárdicos da Neostigmina
+  populacao: adulta
+  via: IV
+  doseMinima: 1
+  doseMaxima: 1
+  dosePadrao: 1
+  unidadeDose: mg
+  intervalo: dose única
+  notaExclusiva:
+    1. Utilizar para prevenir os efeitos bradicárdicos da neostigmina quando esta é usada para reverter os efeitos de relaxantes musculares competitivos.
+
+notaGeral:
+  1. Não exceder as doses recomendadas, especialmente em crianças e idosos, devido ao risco de efeitos anticolinérgicos graves. Não administrar a crianças com febre alta.
+  2. Contraindicado em caso de distúrbios uretroprostáticos, distúrbios cardíacos ou glaucoma.
+  3. Administrar com precaução e sob estreita vigilância em doentes a tomar outros medicamentos com efeito anticolinérgico (antidepressivos, neurolépticos, anti-histamínicos H1, antiparkinsonianos, etc.).
+  4. Não misturar com outros medicamentos na mesma seringa.
+  5. Gravidez: sem contraindicação (evitar tratamento prolongado). Aleitamento: evitar (evitar tratamento prolongado).
+  6. Referencia: MSF Essential Drugs Guidelines, Injectable drugs: ATROPINE
+
+
+
+nome: Azitromicina
+
+concentracao:
+  massa: 500 mg
+  volume: 4.8 ml
+  instrucao: Dissolver o pó do frasco em 4.8 ml de água para preparação injetável. Diluir a dose necessária em cloreto de sódio a 0,9% ou glicose a 5% para obter uma concentração final de 2 mg/ml. Administrar em infusão IV ao longo de 60 minutos. NUNCA ADMINISTRAR POR VIA IV DIRETA OU IM.
+
+condicaoClinica: Sépsis
+  populacao: pediatrica
+  via: IV
+  doseMinima: 10
+  doseMaxima: 20
+  dosePadrao: 10
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 24 h
+  notaExclusiva:
+    1. A dose máxima por infusão é de 500 mg.
+
+condicaoClinica: Sépsis
+  populacao: adulta
+  via: IV
+  doseMinima: 500
+  doseMaxima: 1000
+  dosePadrao: 500
+  unidadeDose: mg
+  intervalo: 24 h
+
+condicaoClinica: Difteria
+  populacao: pediatrica
+  via: IV
+  doseMinima: 10
+  doseMaxima: 12
+  dosePadrao: 10
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 24 h
+  notaExclusiva:
+    1. A dose máxima por infusão é de 500 mg.
+
+condicaoClinica: Difteria
+  populacao: adulta
+  via: IV
+  doseMinima: 500
+  doseMaxima: 500
+  dosePadrao: 500
+  unidadeDose: mg
+  intervalo: 24 h
+
+notaGeral:
+  1. Preparação para perfusão IV: diluir cada dose de azitromicina em cloreto de sódio a 0,9% ou glicose a 5% para obter uma concentração final de 2 mg/ml (por exemplo, 150 mg em 75 ml para uma criança de 15 kg; 500 mg em 250 ml ou 1 g em 500 ml para adultos) e administrar ao longo de 60 minutos. Não misturar com outros medicamentos na mesma infusão.
+  2. Uma vez reconstituída, a solução deve ser utilizada imediatamente; eliminar qualquer frasco aberto não utilizado.
+  3. Não administrar a doentes com alergia à azitromicina ou a outros macrólidos, ou com insuficiência hepática grave.
+  4. Administrar com precaução a crianças com menos de 6 semanas de idade (risco de estenose pilórica hipertrófica) e a doentes com fatores de risco para prolongamento do intervalo QT (tais como distúrbios eletrolíticos, distúrbios cardíacos ou renais pré-existentes, e doentes idosos).
+  5. Evitar a associação com medicamentos que prolonguem o intervalo QT (como amiodarone, cloroquina, co-artemether, fluconazole, haloperidol, mefloquina, moxifloxacina, ondansetrom, pentamidina, quinina, etc.). Administrar com precaução em doentes a tomar digoxina (risco de aumento da toxicidade desta).
+  6. Gravidez e aleitamento: sem contraindicação.
+  7. Duração do tratamento: Transitar para o tratamento por via oral assim que possível.
+  8. Referencia: MSF Essential Drugs Guidelines, Injectable drugs: AZITHROMYCIN
+
+
+
+
+
+
+
+nome: Benzilpenicilina Benzatina|Penicilina G Benzatina
+
+concentracao:
+  massa: 900 mg
+  volume: 4 ml
+  instrucao: Dissolver o pó do frasco de 1.2 MUI (900 mg) em 4 ml de água para preparação injetável para obter uma suspensão para injeção IM profunda. NUNCA ADMINISTRAR POR VIA IV OU PERFUSÃO.
+.
+  massa: 1.8 g
+  volume: 8 ml
+  instrucao: Dissolver o pó do frasco de 2.4 MUI (1.8 g) em 8 ml de água para preparação injetável para obter uma suspensão para injeção IM profunda. NUNCA ADMINISTRAR POR VIA IV OU PERFUSÃO.
+
+condicaoClinica: Sífilis Precoce
+  populacao: pediatrica
+  via: IM
+  doseMinima: 50000
+  doseMaxima: 50000
+  dosePadrao: 50000
+  unidadeDose: UI/kg
+  fatorUnidade: 0.00075 mg
+  intervalo: dose única
+  notaExclusiva:
+    1. A dose máxima por injeção é de 2.4 MUI (1.8 g).
+    2. Indicado na sífilis primária, secundária ou latente precoce com menos de 12 meses de duração.
+
+condicaoClinica: Sífilis Precoce
+  populacao: adulta
+  via: IM
+  doseMinima: 2.4
+  doseMaxima: 2.4
+  dosePadrao: 2.4
+  unidadeDose: MUI
+  fatorUnidade: 1 mg
+  intervalo: dose única
+  notaExclusiva:
+    1. Indicado na sífilis primária, secundária ou latente precoce com menos de 12 meses de duração.
+
+condicaoClinica: Sífilis Latente Tardia
+  populacao: pediatrica
+  via: IM
+  doseMinima: 50000
+  doseMaxima: 50000
+  dosePadrao: 50000
+  unidadeDose: UI/kg
+  fatorUnidade: 1 mg
+  intervalo: 168 h
+  notaExclusiva:
+    1. Duração do tratamento: 3 semanas (uma injeção por semana).
+    2. A dose máxima por injeção é de 2.4 MUI (1.8 g).
+    3. Indicado na sífilis com mais de 12 meses de duração ou de duração desconhecida.
+
+condicaoClinica: Sífilis Latente Tardia
+  populacao: adulta
+  via: IM
+  doseMinima: 2.4
+  doseMaxima: 2.4
+  dosePadrao: 2.4
+  unidadeDose: MUI
+  fatorUnidade: 1 mg
+  intervalo: 168 h
+  notaExclusiva:
+    1. Duração do tratamento: 3 semanas (uma injeção por semana).
+    2. Indicado na sífilis com mais de 12 meses de duração ou de duração desconhecida.
+
+condicaoClinica: Sífilis Congénita
+  populacao: pediatrica
+  via: IM
+  doseMinima: 50000
+  doseMaxima: 50000
+  dosePadrao: 50000
+  unidadeDose: UI/kg
+  fatorUnidade: 1 mg
+  intervalo: dose única
+  notaExclusiva:
+    1. Indicado em caso de ausência de sinais clínicos no recém-nascido e tratamento adequado na mãe.
+
+condicaoClinica: Bouba, Bejel e Pinta
+  populacao: pediatrica
+  via: IM
+  idadeMaxima: 10 anos
+  doseMinima: 1.2
+  doseMaxima: 1.2
+  dosePadrao: 1.2
+  unidadeDose: MUI
+  fatorUnidade: 1 mg
+  intervalo: dose única
+
+condicaoClinica: Bouba, Bejel e Pinta
+  populacao: pediatrica
+  via: IM
+  idadeMinima: 10 anos
+  doseMinima: 2.4
+  doseMaxima: 2.4
+  dosePadrao: 2.4
+  unidadeDose: MUI
+  fatorUnidade: 1 mg
+  intervalo: dose única
+
+condicaoClinica: Bouba, Bejel e Pinta
+  populacao: adulta
+  via: IM
+  doseMinima: 2.4
+  doseMaxima: 2.4
+  dosePadrao: 2.4
+  unidadeDose: MUI
+  fatorUnidade: 1 mg
+  intervalo: dose única
+
+condicaoClinica: Amigdalite Estreptocócica, Profilaxia da Difteria e Profilaxia Primária da Febre Reumática
+  populacao: pediatrica
+  via: IM
+  pesoMaximo: 30 kg
+  doseMinima: 0.6
+  doseMaxima: 0.6
+  dosePadrao: 0.6
+  unidadeDose: MUI
+  fatorUnidade: 1 mg
+  intervalo: dose única
+
+condicaoClinica: Amigdalite Estreptocócica, Profilaxia da Difteria e Profilaxia Primária da Febre Reumática
+  populacao: pediatrica
+  via: IM
+  pesoMinimo: 30 kg
+  doseMinima: 1.2
+  doseMaxima: 1.2
+  dosePadrao: 1.2
+  unidadeDose: MUI
+  fatorUnidade: 1 mg
+  intervalo: dose única
+
+condicaoClinica: Amigdalite Estreptocócica, Profilaxia da Difteria e Profilaxia Primária da Febre Reumática
+  populacao: adulta
+  via: IM
+  doseMinima: 1.2
+  doseMaxima: 1.2
+  dosePadrao: 1.2
+  unidadeDose: MUI
+  fatorUnidade: 1 mg
+  intervalo: dose única
+
+condicaoClinica: Profilaxia Secundária da Febre Reumática
+  populacao: pediatrica
+  via: IM
+  pesoMaximo: 30 kg
+  doseMinima: 0.6
+  doseMaxima: 0.6
+  dosePadrao: 0.6
+  unidadeDose: MUI
+  fatorUnidade: 1 mg
+  intervalo: 672 h
+  notaExclusiva:
+    1. Duração do tratamento: uma injeção a cada 4 semanas (672 h) durante vários anos.
+
+condicaoClinica: Profilaxia Secundária da Febre Reumática
+  populacao: pediatrica
+  via: IM
+  pesoMinimo: 30 kg
+  doseMinima: 1.2
+  doseMaxima: 1.2
+  dosePadrao: 1.2
+  unidadeDose: MUI
+  fatorUnidade: 1 mg
+  intervalo: 672 h
+  notaExclusiva:
+    1. Duração do tratamento: uma injeção a cada 4 semanas (672 h) durante vários anos.
+
+condicaoClinica: Profilaxia Secundária da Febre Reumática
+  populacao: adulta
+  via: IM
+  doseMinima: 1.2
+  doseMaxima: 1.2
+  dosePadrao: 1.2
+  unidadeDose: MUI
+  fatorUnidade: 1 mg
+
+
+
+nome: Benzilpenicilina|Penicilina G
+
+concentracao:
+  massa: 600 mg
+  volume: 2 ml
+  instrucao: Dissolver o pó do frasco de 1 MUI (600 mg) em 2 ml de água para preparação injetável ou cloreto de sódio a 0,9%, para injeção IM, injeção IV lenta (3 a 5 minutos) ou perfusão IV (60 minutos).
+.
+  massa: 3 g
+  volume: 5 ml
+  instrucao: Dissolver o pó do frasco de 5 MUI (3 g) em 5 ml de água para preparação injetável ou cloreto de sódio a 0,9%, para injeção IM, injeção IV lenta (3 a 5 minutos) ou perfusão IV (60 minutos).
+
+condicaoClinica: Difteria
+  populacao: pediatrica
+  via: IM, IV
+  doseMinima: 15
+  doseMaxima: 15
+  dosePadrao: 15
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 6 h
+  notaExclusiva:
+    1. A dose máxima por injeção é de 600 mg (1 MUI).
+    2. Duração do tratamento: transitar para a via oral assim que o doente consiga engolir, para completar 14 dias de tratamento.
+
+condicaoClinica: Difteria
+  populacao: adulta
+  via: IM, IV
+  doseMinima: 600
+  doseMaxima: 600
+  dosePadrao: 600
+  unidadeDose: mg
+  intervalo: 6 h
+  notaExclusiva:
+    1. Duração do tratamento: transitar para a via oral assim que o doente consiga engolir, para completar 14 dias de tratamento.
+
+condicaoClinica: Leptospirose Grave
+  populacao: pediatrica
+  via: IV
+  doseMinima: 30
+  doseMaxima: 30
+  dosePadrao: 30
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 6 h
+  notaExclusiva:
+    1. A dose máxima por injeção é de 1200 mg (2 MUI).
+    2. Duração do tratamento: 7 dias.
+
+condicaoClinica: Leptospirose Grave
+  populacao: adulta
+  via: IV
+  doseMinima: 600
+  doseMaxima: 1200
+  dosePadrao: 600
+  unidadeDose: mg
+  intervalo: 6 h
+  notaExclusiva:
+    1. Duração do tratamento: 7 dias.
+
+condicaoClinica: Neurossífilis
+  populacao: adulta
+  via: IV
+  doseMinima: 1200
+  doseMaxima: 2400
+  dosePadrao: 1200
+  unidadeDose: mg
+  intervalo: 4 h
+  notaExclusiva:
+    1. Duração do tratamento: 14 dias.
+
+condicaoClinica: Sífilis Congénita
+  populacao: pediatrica
+  via: IV
+  doseMinima: 30
+  doseMaxima: 30
+  dosePadrao: 30
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: ataque(12 h); manutencao(8 h)
+  notaExclusiva:
+    1. Duração do tratamento: 10 dias.
+    2. Esquema temporal de administração: administrar a dose a cada 12 h do Dia 1 ao Dia 7 (fase de ataque) e a cada 8 h do Dia 8 ao Dia 10 (fase de manutenção).
+
+notaGeral:
+  1. Preparação e administração: Para injeção IM, injeção IV lenta (3 a 5 minutos) através de um tubo de perfusão, ou perfusão IV (60 minutos) em cloreto de sódio a 0,9% ou glicose a 5%.
+  2. Este medicamento deve ser administrado em ambiente hospitalar (injeções a cada 4 a 6 horas).
+  3. Não administrar a doentes com alergia a penicilinas.
+  4. Administrar com precaução em doentes com alergia a cefalosporinas (risco de sensibilidade cruzada) ou com insuficiência renal (reduzir a dose em doentes com neurossífilis).
+  5. Pode causar distúrbios gastrointestinais, dor no local da injeção, anemia, reações alérgicas (por vezes graves) e convulsões (em caso de injeção IV rápida, doses elevadas ou insuficiência renal). Em doentes com sífilis, pode desencadear a reação de Jarisch-Herxheimer (febre, calafrios, dores musculares, taquicardia).
+  6. Não associar com metotrexato (risco de aumento da toxicidade deste).
+  7. Gravidez e aleitamento: sem contraindicação.
+  8. Não confundir a benzilpenicilina de ação rápida (via IV) com as penicilinas de ação prolongada (benzilpenicilina benzatina e benzilpenicilina procaína), que são exclusivamente para via IM. Não misturar com outros medicamentos na mesma seringa ou perfusão. Uma vez reconstituída, a solução/suspensão deve ser utilizada imediatamente.
+  9. Referencia: MSF Essential Drugs Guidelines, Injectable drugs: BENZYLPENICILLIN = PENICILLIN G
+
+
+
+
+nome: Benzilpenicilina Procaína|Penicilina G Procaína
+
+concentracao:
+  massa: 600 mg
+  volume: 4 ml
+  instrucao: Dissolver o pó do frasco de 0,6 MUI (600 mg) com o diluente fornecido pelo fabricante (ampola de 4 ml de água para preparação injetável) para obter uma suspensão para injeção IM. ADMINISTRAR APENAS POR VIA IM. NUNCA ADMINISTRAR POR VIA IV (INJEÇÃO OU PERFUSÃO).
+.
+  massa: 1.2 g
+  volume: 5 ml
+  instrucao: Dissolver o pó do frasco de 1,2 MUI (1,2 g) com o diluente fornecido pelo fabricante (ampola de 5 ml de água para preparação injetável) para obter uma suspensão para injeção IM. ADMINISTRAR APENAS POR VIA IM. NUNCA ADMINISTRAR POR VIA IV (INJEÇÃO OU PERFUSÃO).
+
+condicaoClinica: Difteria
+  populacao: pediatrica
+  via: IM
+  doseMinima: 50
+  doseMaxima: 50
+  dosePadrao: 50
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 24 h
+  notaExclusiva:
+    1. A dose máxima diária em crianças é de 1.2 g (1.2 MUI).
+    2. Duração do tratamento: transitar para a via oral assim que o doente consiga engolir, para completar 14 dias de tratamento.
+
+condicaoClinica: Difteria
+  populacao: adulta
+  via: IM
+  doseMinima: 1.2
+  doseMaxima: 1.2
+  dosePadrao: 1.2
+  unidadeDose: g
+  intervalo: 24 h
+  notaExclusiva:
+    1. Duração do tratamento: transitar para a via oral assim que o doente consiga engolir, para completar 14 dias de tratamento.
+
+condicaoClinica: Sífilis Congénita
+  populacao: pediatrica
+  via: IM
+  doseMinima: 50
+  doseMaxima: 50
+  dosePadrao: 50
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 24 h
+  notaExclusiva:
+    1. Duração do tratamento: 10 dias.
+    2. Indicado se o recém-nascido apresentar sinais clínicos de sífilis ou se a mãe não tiver recebido tratamento adequado para a sífilis durante a gravidez.
+
+notaGeral:
+  1. Administrar exclusivamente por via IM. NUNCA ADMINISTRAR POR VIA IV (INJEÇÃO OU PERFUSÃO).
+  2. Não confundir a benzilpenicilina procaína (de ação prolongada, via IM) com a benzilpenicilina de ação rápida (penicilina G), que é administrada várias vezes ao dia por via IV.
+  3. Não misturar com outros medicamentos na mesma seringa. Uma vez reconstituída, a suspensão deve ser utilizada imediatamente.
+  4. Referencia: MSF Essential Drugs Guidelines, Injectable drugs: BENZYLPENICILLIN PROCAINE = PENICILLIN G PROCAINE
+
+
+
+
+nome: Butilescopolamina|Brometo de Hioscina
+
+concentracao:
+  massa: 20 mg
+  volume: 1 ml
+  instrucao: Administrar por via IM, SC ou injeção IV lenta.
+
+condicaoClinica: Espasmos do Trato Gastrointestinal e Genitourinário
+  populacao: adulta
+  via: IM, SC, IV
+  doseMinima: 20
+  doseMaxima: 40
+  dosePadrao: 20
+  unidadeDose: mg
+  intervalo:
+  notaExclusiva:
+    1. A dose máxima diária é de 100 mg.
+
+notaGeral:
+  1. Não exceder as doses recomendadas, especialmente em crianças e idosos, devido ao risco de efeitos anticolinérgicos graves.
+  2. Contraindicado em doentes com hiperplasia benigna da próstata, retenção urinária, glaucoma de ângulo fechado ou taquicardia.
+  3. Administrar com precaução e sob estreita vigilância em caso de insuficiência cardíaca, insuficiência coronária, distúrbios do ritmo cardíaco, hipertensão ou febre (pois pode afetar a termorregulação).
+  4. Administrar com precaução em doentes a tomar outros medicamentos anticolinérgicos (antidepressivos, neurolépticos, anti-histamínicos H1, antiparkinsonianos, etc.).
+  5. Gravidez e aleitamento: sem contraindicação (evitar tratamento prolongado).
+  6. Duração do tratamento: de acordo com a resposta clínica (evitar tratamento prolongado).
+  7. Referencia: MSF Essential Drugs Guidelines, Injectable drugs: HYOSCINE BUTYLBROMIDE = BUTYLSCOPOLAMINE
+
+
+
+nome: Gluconato de Cálcio
+
+concentracao:
+  massa: 1 g
+  volume: 10 ml
+  instrucao: Ampola a 10% (100 mg/ml, 10 ml) [1]. Cada ampola de 1 g contém aproximadamente 2,2 mmol (4,5 mEq) de cálcio, o que equivale a 89 mg de cálcio elementar [2]. Para injeção IV lenta ou infusão IV diluído em glicose a 5%, cloreto de sódio a 0,9% ou Ringer Lactato [1]. NUNCA ADMINISTRAR POR VIA IM OU SC (risco de necrose) [3].
+
+condicaoClinica: Hipocalcémia Grave - Bolus Inicial
+  populacao: pediatrica
+  via: IV
+  pesoMaximo: 20 kg
+  doseMinima: 0.5
+  doseMaxima: 0.5
+  dosePadrao: 0.5
+  unidadeDose: ml/kg
+  fatorUnidade: 1 ml
+  intervalo: dose única
+  notaExclusiva:
+    1. Administrar por injeção IV lenta, ao longo de pelo menos 5 minutos [3].
+    2. A dose máxima é de 10 ml [3].
+    3. Diluir 1 parte de gluconato de cálcio em 4 partes de diluente (glicose a 5%, cloreto de sódio a 0,9% ou Ringer Lactato) para crianças; em caso de emergência, pode ser administrado sem diluir [1].
+
+condicaoClinica: Hipocalcémia Grave - Bolus Inicial
+  populacao: pediatrica
+  via: IV
+  pesoMinimo: 20 kg
+  doseMinima: 10
+  doseMaxima: 10
+  dosePadrao: 10
+  unidadeDose: ml
+  intervalo: dose única
+  notaExclusiva:
+    1. Administrar por injeção IV lenta, ao longo de pelo menos 5 minutos [3].
+
+condicaoClinica: Hipocalcémia Grave - Bolus Inicial
+  populacao: adulta
+  via: IV
+  doseMinima: 10
+  doseMaxima: 10
+  dosePadrao: 10
+  unidadeDose: ml
+  intervalo: dose única
+  notaExclusiva:
+    1. Administrar por injeção IV lenta, ao longo de pelo menos 5 minutos [3].
+
+condicaoClinica: Hipocalcémia Grave - Perfusão Contínua
+  populacao: pediatrica
+  via: IV
+  pesoMaximo: 20 kg
+  doseMinima: 2
+  doseMaxima: 4
+  dosePadrao: 2
+  unidadeDose: ml/kg
+  fatorUnidade: 1 ml
+  intervalo: 24 h
+  notaExclusiva:
+    1. Administrar por infusão contínua ao longo de 24 horas [3].
+    2. A dose máxima é de 40 ml [3].
+
+condicaoClinica: Hipocalcémia Grave - Perfusão Contínua
+  populacao: pediatrica
+  via: IV
+  pesoMinimo: 20 kg
+  doseMinima: 40
+  doseMaxima: 40
+  dosePadrao: 40
+  unidadeDose: ml
+  intervalo: 24 h
+  notaExclusiva:
+    1. Administrar por infusão contínua ao longo de 24 horas [3].
+    2. Diluir em 250 ml ou 500 ml de glicose a 5%, cloreto de sódio a 0,9% ou Ringer Lactato [3].
+
+condicaoClinica: Hipocalcémia Grave - Perfusão Contínua
+  populacao: adulta
+  via: IV
+  doseMinima: 40
+  doseMaxima: 40
+  dosePadrao: 40
+  unidadeDose: ml
+  intervalo: 24 h
+  notaExclusiva:
+    1. Administrar por infusão contínua ao longo de 24 horas [3].
+    2. Diluir em 250 ml ou 500 ml de glicose a 5%, cloreto de sódio a 0,9% ou Ringer Lactato [3].
+
+condicaoClinica: Intoxicação por Sulfato de Magnésio
+  populacao: pediatrica
+  via: IV
+  pesoMaximo: 20 kg
+  doseMinima: 0.5
+  doseMaxima: 0.5
+  dosePadrao: 0.5
+  unidadeDose: ml/kg
+  fatorUnidade: 1 ml
+  intervalo: dose única
+  notaExclusiva:
+    1. Administrar por injeção IV lenta, ao longo de pelo menos 5 minutos [4].
+    2. A dose máxima é de 10 ml [4].
+
+condicaoClinica: Intoxicação por Sulfato de Magnésio
+  populacao: pediatrica
+  via: IV
+  pesoMinimo: 20 kg
+  doseMinima: 10
+  doseMaxima: 10
+  dosePadrao: 10
+  unidadeDose: ml
+  intervalo: dose única
+  notaExclusiva:
+    1. Administrar por injeção IV lenta, ao longo de pelo menos 5 minutos [4].
+
+condicaoClinica: Intoxicação por Sulfato de Magnésio
+  populacao: adulta
+  via: IV
+  doseMinima: 10
+  doseMaxima: 10
+  dosePadrao: 10
+  unidadeDose: ml
+  intervalo: dose única
+  notaExclusiva:
+    1. Administrar por injeção IV lenta, ao longo de pelo menos 5 minutes [4].
+
+notaGeral:
+  1. NUNCA ADMINISTRAR POR VIA IM OU SC devido ao risco de necrose tecidular grave em caso de extravasamento [3, 5].
+  2. Contraindicado em doentes com doença renal grave ou que estejam a receber glicosídeos cardíacos [4].
+  3. Não administrar ceftriaxone a recém-nascidos que estejam a receber gluconato de cálcio, devido ao risco de precipitação de sais de ceftriaxone-cálcio nos pulmões e rins [4, 5].
+  4. O doente deve ser colocado em posição horizontal antes da injeção e permanecer deitado durante 30 a 60 minutos após a administração [2].
+  5. Monitorizar a taxa de infusão e os sinais de hipercalcémia (primeiros sinais: náuseas, vómitos, sede, poliúria; em casos graves: hipotensão, bradicardia, arritmia, síncope e paragem cardíaca) [5].
+  6. Para infusão contínua: a concentração de cálcio no fluido de infusão não deve exceder 50 mg/ml (0,5 ml/ml). Misturar muito bem o cálcio e o fluido de infusão, invertendo o frasco ou saco pelo menos 5 vezes [1, 3].
+  7. Incompatível com muitos medicamentos: não misturar com outros fármacos na mesma seringa ou saco de infusão. Lavar abundantemente a linha IV entre infusões, especialmente em doentes a receber ceftriaxone, cefazolina, anfotericina B ou bicarbonato de sódio [2, 6]. Não utilizar se a solução estiver turva ou se forem visíveis partículas (precipitado de gluconato de cálcio) [6].
+  8. Gravidez e aleitamento: sem contraindicação [2].
+  9. Duração do tratamento: transitar para a via oral o mais rapidamente possível [4].
+  10. Referencia: MSF Essential Drugs Guidelines, Injectable drugs: CALCIUM GLUCONATE
+
+
+
+
+
+
+  nome: Cefotaxima
+
+concentracao:
+  massa: 250 mg
+  volume: 2 ml
+  instrucao: Dissolver o pó do frasco de 250 mg (ou de 500 mg) em 2 ml de água para preparação injetável, para injeção IM, injeção IV lenta (3 a 5 minutos) ou perfusão IV (20 a 60 minutos) em cloreto de sódio a 0,9% ou glicose a 5%.
+
+condicaoClinica: Meningite Bacteriana, Infeção Urinária ou Pneumonia
+  populacao: pediatrica
+  via: IM, IV
+  pesoMaximo: 2 kg
+  idadeMaxima: 7 dias
+  doseMinima: 50
+  doseMaxima: 50
+  dosePadrao: 50
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 12 h
+
+condicaoClinica: Meningite Bacteriana, Infeção Urinária ou Pneumonia
+  populacao: pediatrica
+  via: IM, IV
+  pesoMinimo: 2 kg
+  idadeMaxima: 7 dias
+  doseMinima: 50
+  doseMaxima: 50
+  dosePadrao: 50
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 8 h
+
+condicaoClinica: Meningite Bacteriana, Infeção Urinária ou Pneumonia
+  populacao: pediatrica
+  via: IM, IV
+  idadeMinima: 8 dias
+  idadeMaxima: 1 mês
+  doseMinima: 50
+  doseMaxima: 50
+  dosePadrao: 50
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 8 h
+
+condicaoClinica: Conjuntivite Gonocócica
+  populacao: pediatrica
+  via: IM
+  doseMinima: 100
+  doseMaxima: 100
+  dosePadrao: 100
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: dose única
+  notaExclusiva:
+    1. Utilizar apenas se a ceftriaxone não estiver disponível ou for contraindicada.
+
+notaGeral:
+  1. Preparação para perfusão IV: cada dose de cefotaxima deve ser dissolvida em 5 ml/kg de cloreto de sódio a 0,9% ou glicose a 5%. Para administração IV direta, dissolver o pó apenas em água para preparação injetável.
+  2. Uma vez reconstituída, a solução deve ser utilizada imediatamente; eliminar qualquer frasco aberto não utilizado. Não misturar com outros medicamentos na mesma seringa ou frasco de infusão.
+  3. Administrar com precaução e reduzir a dose em doentes com insuficiência renal.
+  4. Evitar ou monitorizar a associação com outros medicamentos nefrotóxicos (anfotericina B, aminoglicosídeos, pentamidina, etc.).
+  5. Pode causar distúrbios gastrointestinais (diarreia, náuseas), distúrbios hematológicos (neutropénia, leucopénia), distúrbios do ritmo cardíaco se a injeção IV for demasiado rápida, e reações alérgicas ou cutâneas (síndromes de Stevens-Johnson e Lyell), por vezes graves.
+  6. Duração do tratamento: depende da indicação e da resposta clínica.
+  7. Referencia: MSF Essential Drugs Guidelines, Injectable drugs: CEFOTAXIME
+
+
+
+nome: Ceftriaxone
+
+concentracao:
+  massa: 250 mg
+  instrucao: Dissolver o pó do frasco com água para preparação injetável para injeção IV lenta (3 minutos) ou infusão IV (30 minutos) em cloreto de sódio a 0,9% ou glicose a 5% [1]. Para via IM, dissolver apenas com o solvente contendo lidocaína fornecido pelo fabricante (NUNCA administrar por via IV a solução reconstituída com lidocaína) [1].
+.
+  massa: 1 g
+  instrucao: Dissolver o pó do frasco com água para preparação injetável para injeção IV lenta (3 minutos) ou infusão IV (30 minutos) em cloreto de sódio a 0,9% ou glicose a 5% [1]. Para via IM, dissolver apenas com o solvente contendo lidocaína fornecido pelo fabricante (NUNCA administrar por via IV a solução reconstituída com lidocaína) [1].
+
+condicaoClinica: Infeções Bacterianas Graves
+  populacao: pediatrica
+  via: IM, IV
+  idadeMinima: 1 mês
+  pesoMaximo: 50 kg
+  doseMinima: 50
+  doseMaxima: 100
+  dosePadrao: 50
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 24 h
+  notaExclusiva:
+    1. A dose máxima diária é de 4 g [1].
+
+condicaoClinica: Infeções Bacterianas Graves
+  populacao: adulta
+  via: IM, IV
+  doseMinima: 1
+  doseMaxima: 2
+  dosePadrao: 1
+  unidadeDose: g
+  intervalo: 24 h
+
+condicaoClinica: Meningite Bacteriana ou Febre Tifóide
+  populacao: adulta
+  via: IV
+  doseMinima: 4
+  doseMaxima: 4
+  dosePadrao: 4
+  unidadeDose: g
+  intervalo: 24 h
+  notaExclusiva:
+    1. Administrar por infusão IV apenas [2].
+
+condicaoClinica: Meningite Bacteriana ou Febre Tifóide
+  populacao: adulta
+  via: IV
+  doseMinima: 2
+  doseMaxima: 2
+  dosePadrao: 2
+  unidadeDose: g
+  intervalo: 12 h
+  notaExclusiva:
+    1. Administrar por infusão IV apenas [2].
+
+condicaoClinica: Cervicite e Uretrite Gonocócica
+  populacao: pediatrica
+  via: IM
+  pesoMaximo: 45 kg
+  doseMinima: 125
+  doseMaxima: 125
+  dosePadrao: 125
+  unidadeDose: mg
+  intervalo: dose única
+
+condicaoClinica: Cervicite e Uretrite Gonocócica
+  populacao: pediatrica
+  via: IM
+  pesoMinimo: 45 kg
+  doseMinima: 500
+  doseMaxima: 500
+  dosePadrao: 500
+  unidadeDose: mg
+  intervalo: dose única
+
+condicaoClinica: Cervicite e Uretrite Gonocócica
+  populacao: adulta
+  via: IM
+  doseMinima: 500
+  doseMaxima: 500
+  dosePadrao: 500
+  unidadeDose: mg
+  intervalo: dose única
+
+condicaoClinica: Cancroide
+  populacao: pediatrica
+  via: IM
+  pesoMaximo: 45 kg
+  doseMinima: 125
+  doseMaxima: 125
+  dosePadrao: 125
+  unidadeDose: mg
+  intervalo: dose única
+
+condicaoClinica: Cancroide
+  populacao: pediatrica
+  via: IM
+  pesoMinimo: 45 kg
+  doseMinima: 250
+  doseMaxima: 250
+  dosePadrao: 250
+  unidadeDose: mg
+  intervalo: dose única
+
+condicaoClinica: Cancroide
+  populacao: adulta
+  via: IM
+  doseMinima: 250
+  doseMaxima: 250
+  dosePadrao: 250
+  unidadeDose: mg
+  intervalo: dose única
+
+condicaoClinica: Conjuntivite Gonocócica
+  populacao: pediatrica
+  via: IM
+  idadeMaxima: 28 dias
+  doseMinima: 50
+  doseMaxima: 50
+  dosePadrao: 50
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: dose única
+  notaExclusiva:
+    1. A dose máxima é de 125 mg [3].
+
+condicaoClinica: Conjuntivite Gonocócica
+  populacao: adulta
+  via: IM
+  doseMinima: 1
+  doseMaxima: 1
+  dosePadrao: 1
+  unidadeDose: g
+  intervalo: dose única
+
+notaGeral:
+  1. Preparação para infusão IV: diluir cada dose de ceftriaxone em 5 ml/kg de cloreto de sódio a 0,9% ou glicose a 5% em crianças com menos de 20 kg e num saco de 100 ml em crianças com 20 kg ou mais e em adultos [3].
+  2. Não administrar a doentes com alergia a cefalosporinas ou penicilinas (risco de sensibilidade cruzada) [4].
+  3. Não administrar a recém-nascidos com icterícia (risco de encefalopatia por bilirrubina) ou que estejam a receber gluconato de cálcio (risco de precipitação de sais de ceftriaxone-cálcio nos pulmões e rins) [4].
+  4. Reduzir a dose em doentes com insuficiência renal grave (máximo de 50 mg/kg por dia ou 2 g por dia por via IV) [4, 5].
+  5. Não misturar o ceftriaxone com soluções que contenham cálcio, como o Ringer Lactato (risco de formação de partículas) [5].
+  6. Doses superiores a 1 g por via IM devem ser administradas em duas injeções divididas igualmente (uma em cada nádega) [2, 5]. Doses superiores a 2 g devem ser administradas apenas por infusão IV [2].
+  7. Não misturar com outros medicamentos na mesma seringa ou infusão [2]. Reconstituir e utilizar imediatamente; eliminar frascos abertos não utilizados [4].
+  8. Gravidez e aleitamento: sem contraindicação [5].
+  9. Referencia: MSF Essential Drugs Guidelines, Injectable drugs: CEFTRIAXONE
+
+
+nome: Cloranfenicol
+
+concentracao:
+  massa: 1 g
+  volume: 10 ml
+  instrucao: Dissolver o pó do frasco de 1 g em 10 ml de água para preparação injetável, para obter uma solução para injeção IV lenta (ao longo de 1 a 2 minutos).
+
+condicaoClinica: Meningite por Peste
+  populacao: pediatrica
+  via: IV
+  idadeMinima: 1 ano
+  idadeMaxima: 12 anos
+  doseMinima: 25
+  doseMaxima: 25
+  dosePadrao: 25
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 8 h
+  notaExclusiva:
+    1. Duração do tratamento: 10 a 14 dias.
+
+condicaoClinica: Meningite por Peste
+  populacao: pediatrica
+  via: IV
+  idadeMinima: 13 anos
+  doseMinima: 1
+  doseMaxima: 1
+  dosePadrao: 1
+  unidadeDose: g
+  intervalo: 8 h
+  notaExclusiva:
+    1. Duração do tratamento: 10 a 14 dias.
+
+condicaoClinica: Meningite por Peste
+  populacao: adulta
+  via: IV
+  doseMinima: 1
+  doseMaxima: 1
+  dosePadrao: 1
+  unidadeDose: g
+  intervalo: 8 h
+  notaExclusiva:
+    1. Duração do tratamento: 10 a 14 dias.
+
+notaGeral:
+  1. Contraindicação absoluta: Não administrar a crianças com menos de 1 ano.
+  2. Contraindicado em doentes com antecedentes de reações alérgicas ou de depressão da medula óssea durante um tratamento anterior com cloranfenicol, e em doentes com défice de G6PD.
+  3. Pode causar toxicidade hematológica relacionada com a dose (depressão da medula óssea, anemia, leucopénia, trombocitopénia) e reações alérgicas (parar imediatamente o tratamento se ocorrerem); pode também causar distúrbios gastrointestinais e neuropatias periféricas e óticas.
+  4. Reduzir a dose em doentes com insuficiência hepática ou renal.
+  5. Interações: Evitar ou monitorizar a associação com medicamentos potencialmente hematotóxicos (como carbamazepina, co-trimoxazol, flucitosina, pirimetamina, zidovudine, etc.).
+  6. Gravidez e aleitamento: Sem contraindicação para a meningite por peste. No entanto, se administrado no terceiro trimestre da gravidez, existe o risco de síndrome cinzenta no recém-nascido (vómitos, hipotermia, cor de pele cinzento-azulada e depressão cardiovascular). Se usado durante o aleitamento, monitorizar o recém-nascido para distúrbios hematológicos e gastrointestinais.
+  7. Conservação: Manter a uma temperatura inferior a 25 °C.
+  8. Referencia: MSF Essential Drugs Guidelines, Injectable drugs: CHLORAMPHENICOL
+
+
+
+nome: Clindamicina
+
+concentracao:
+  massa: 300 mg
+  volume: 2 ml
+  instrucao: Ampola contendo 300 mg em 2 ml (150 mg/ml). Diluir cada dose de clindamicina em 5 ml/kg de cloreto de sódio a 0,9% ou glicose a 5% em crianças com menos de 20 kg e num saco de 100 ml de cloreto de sódio a 0,9% ou glicose a 5% em crianças com 20 kg ou mais e em adultos. Administrar em infusão IV ao longo de 30 minutos. NUNCA ADMINISTRAR POR VIA IV DIRETA SEM DILUIÇÃO.
+
+condicaoClinica: Infeções Bacterianas Graves por Anaeróbios, Estafilococos ou Estreptococos
+  populacao: pediatrica
+  via: IV
+  pesoMaximo: 2 kg
+  idadeMaxima: 7 dias
+  doseMinima: 5
+  doseMaxima: 5
+  dosePadrao: 5
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 12 h
+
+condicaoClinica: Infeções Bacterianas Graves por Anaeróbios, Estafilococos ou Estreptococos
+  populacao: pediatrica
+  via: IV
+  pesoMinimo: 2 kg
+  idadeMaxima: 7 dias
+  doseMinima: 5
+  doseMaxima: 5
+  dosePadrao: 5
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 8 h
+
+condicaoClinica: Infeções Bacterianas Graves por Anaeróbios, Estafilococos ou Estreptococos
+  populacao: pediatrica
+  via: IV
+  pesoMaximo: 2 kg
+  idadeMinima: 8 dias
+  idadeMaxima: 1 mês
+  doseMinima: 5
+  doseMaxima: 5
+  dosePadrao: 5
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 8 h
+
+condicaoClinica: Infeções Bacterianas Graves por Anaeróbios, Estafilococos ou Estreptococos
+  populacao: pediatrica
+  via: IV
+  pesoMinimo: 2 kg
+  idadeMinima: 8 dias
+  idadeMaxima: 1 mês
+  doseMinima: 10
+  doseMaxima: 10
+  dosePadrao: 10
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 8 h
+
+condicaoClinica: Infeções Bacterianas Graves por Anaeróbios, Estafilococos ou Estreptococos
+  populacao: pediatrica
+  via: IV
+  idadeMinima: 1 mês
+  doseMinima: 10
+  doseMaxima: 10
+  dosePadrao: 10
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 8 h
+  notaExclusiva:
+    1. A dose máxima por infusão é de 600 mg.
+
+condicaoClinica: Infeções Bacterianas Graves por Anaeróbios, Estafilococos ou Estreptococos
+  populacao: adulta
+  via: IV
+  doseMinima: 600
+  doseMaxima: 900
+  dosePadrao: 600
+  unidadeDose: mg
+  intervalo: 8 h
+
+condicaoClinica: Infeções Necrotizantes e Antraz Cutâneo Grave
+  populacao: pediatrica
+  via: IV
+  pesoMaximo: 2 kg
+  idadeMaxima: 7 dias
+  doseMinima: 5
+  doseMaxima: 5
+  dosePadrao: 5
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 12 h
+
+condicaoClinica: Infeções Necrotizantes e Antraz Cutâneo Grave
+  populacao: pediatrica
+  via: IV
+  pesoMinimo: 2 kg
+  idadeMaxima: 7 dias
+  doseMinima: 5
+  doseMaxima: 5
+  dosePadrao: 5
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 8 h
+
+condicaoClinica: Infeções Necrotizantes e Antraz Cutâneo Grave
+  populacao: pediatrica
+  via: IV
+  pesoMaximo: 2 kg
+  idadeMinima: 8 dias
+  idadeMaxima: 1 mês
+  doseMinima: 5
+  doseMaxima: 5
+  dosePadrao: 5
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 8 h
+
+condicaoClinica: Infeções Necrotizantes e Antraz Cutâneo Grave
+  populacao: pediatrica
+  via: IV
+  pesoMinimo: 2 kg
+  idadeMinima: 8 dias
+  idadeMaxima: 1 mês
+  doseMinima: 10
+  doseMaxima: 10
+  dosePadrao: 1**Posição: 17/72**  
+Medicamento: **CLINDAMYCIN injectable**
+
+
+
+
+nome: Cloxacilina 
+
+concentracao:
+  massa: 500 mg
+  volume: 4 ml
+  instrucao: Dissolver o pó do frasco de 500 mg em 4 ml de água para preparação injetável para obter uma solução com concentração de 125 mg/ml (0,125 g/ml) [2, 3]. Administrar por perfusão IV diluído em cloreto de sódio a 0,9% ou glicose a 5%, ao longo de 60 minutos [2, 4].
+
+condicaoClinica: Infeções Bacterianas Graves (Meningite, Pneumonia, Omfalite, Septicemia, Endocardite, Osteomielite, Infeções Necrotizantes) 
+  populacao: pediatrica
+  via: IV
+  doseMinima: 25
+  doseMaxima: 50
+  dosePadrao: 25
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 6 h, 8 h, 12 h [2, 4]
+  notaExclusiva:
+    1. Crianças com 1 mês ou mais: 25 a 50 mg/kg (dose máxima de 2 g) a cada 6 h [4].
+    2. Neonatos (0 a 7 dias, < 2 kg): 50 mg/kg a cada 12 h [2].
+    3. Neonatos (0 a 7 dias, >= 2 kg): 50 mg/kg a cada 8 h [2].
+    4. Neonatos (8 dias a < 1 mês, < 2 kg): 50 mg/kg a cada 8 h [4].
+    5. Neonatos (8 dias a < 1 mês, >= 2 kg): 50 mg/kg a cada 6 h [4].
+
+condicaoClinica: Infeções Bacterianas Graves (Meningite, Pneumonia, Omfalite, Septicemia, Endocardite, Osteomielite, Infeções Necrotizantes) [2]
+  populacao: adulta
+  via: IV
+  doseMinima: 2
+  doseMaxima: 2
+  dosePadrao: 2
+  unidadeDose: g
+  intervalo: 6 h [4]
+
+condicaoClinica: Erisipela e Celulite 
+  populacao: pediatrica
+  via: IV
+  doseMinima: 12.5
+  doseMaxima: 25
+  dosePadrao: 12.5
+  unidadeDose: mg/kg
+  fatorUnidade: 1 mg
+  intervalo: 6 h, 8 h, 12 h 
+  notaExclusiva:
+    1. A dose para Erisipela e Celulite corresponde a metade da dose de infeções graves [4].
+    2. Crianças com 1 mês ou mais: 12.5 a 25 mg/kg (dose máxima de 1 g) a cada 6 h [4].
+    3. Neonatos (0 a 7 dias, < 2 kg): 25 mg/kg a cada 12 h [2, 4].
+    4. Neonatos (0 a 7 dias, >= 2 kg): 25 mg/kg a cada 8 h [2, 4].
+    5. Neonatos (8 dias a < 1 mês, < 2 kg): 25 mg/kg a cada 8 h [4].
+    6. Neonatos (8 dias a < 1 mês, >= 2 kg): 25 mg/kg a cada 6 h [4].
+
+condicaoClinica: Erisipela e Celulite
+  populacao: adulta
+  via: IV
+  doseMinima: 1
+  doseMaxima: 1
+  dosePadrao: 1
+  unidadeDose: g
+  intervalo: 6 h 
+
+notaGeral:
+  1. Preparação para perfusão IV: diluir cada dose de cloxacilina em 5 ml/kg de cloreto de sódio a 0,9% ou glicose a 5% em crianças com menos de 20 kg, e num saco de 100 ml de cloreto de sódio a 0,9% ou glicose a 5% em crianças com 20 kg ou mais e em adultos [4].
+  2. Transição para via oral: transitar para a via oral assim que possível com amoxicilina/clavulanato ou cefalexina, dependendo da indicação [3]. Não utilizar cloxacilina oral para completar o tratamento após terapia parentérica [3].
+  3. Contraindicado em doentes com alergia a penicilinas [5].
+  4. Administrar com precaução em caso de alergia a cefalosporinas (risco de sensibilidade cruzada) ou em doentes com insuficiência renal (reduzir a dose se necessário) [5].
+  5. Reações adversas: pode provocar distúrbios gastrointestinais (diarreia), reações alérgicas (por vezes graves) e distúrbios hematológicos [5].
+  6. Não associar com metotrexato (risco de aumento da toxicidade deste) [5].
+  7. Gravidez e aleitamento: sem contraindicações [5].
+  8. Não misturar com outros medicamentos na mesma seringa ou saco de perfusão [6]. Uma vez reconstituída, a solução deve ser utilizada imediatamente [6].
+  9. Referencia: MSF Essential Drugs Guidelines, Injectable drugs: CLOXACILLIN [1]

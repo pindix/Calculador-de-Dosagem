@@ -1,0 +1,89 @@
+nome: 
+
+concentracao
+    massa: 
+    volume: 
+    instrucao:
+    . 
+    massa: 
+    volume:
+    instrucao:
+
+condicaoClinica:
+    populacao: 
+    via: 
+    pesoMinimo: 
+    pesoMaximo: 
+    idadeMinima: 
+    idadeMaxima:
+    doseMinima:
+    doseMaxima:
+    dosePadrao:
+    unidadeDose:
+    fatorUnidade: 
+    intervalo:
+    notaExclusiva:
+
+condicaoClinica:
+    populacao: 
+    via: 
+    pesoMinimo: 
+    pesoMaximo: 
+    idadeMinima: 
+    idadeMaxima:
+    ataque:
+        doseMinima:
+        doseMaxima:
+        dosePadrao:
+        unidadeDose:
+        fatorUnidade:
+        intervalo:
+    manutencao:
+        doseMinima:
+        doseMaxima:
+        dosePadrao:
+        unidadeDose:
+        fatorUnidade:
+        intervalo:
+    notaExclusiva:
+
+notaGeral:
+
+
+
+
+Preenche o FORMULÁRIO MODELO com dados clínicos, seguindo estas regras à risca. Nunca inventes valores — se a fonte não indicar algo, omite o campo por completo (não escrevas "campo:" vazio). Usa sempre a fonte que eu carregar como única origem dos dados.
+
+═══════════════════════════
+OBRIGATÓRIOS
+═══════════════════════════
+`nome` e `concentracao` (massa+volume) têm de vir sempre preenchidos.
+Todos os outros campos só aparecem se a fonte disser algo sobre eles.
+Se o medicamento tiver mais de um nome pelo qual é conhecido (sinónimos), separa-os com `|` em `nome:` (ex. `nome: Amoxicilina|Ácido Clavulânico`).
+
+═══════════════════════════
+CONCENTRACAO
+═══════════════════════════
+- Cada apresentação tem `massa`, `volume` e, só se precisar de reconstituição (pó → líquido) ou for mesmo necessário, `instrucao` com o modo de preparo.
+- Mais de uma apresentação comercial? Separa com uma linha só com um ponto (`.`) — tudo depois do ponto é a apresentação seguinte. Nunca repitas "concentracao:".
+
+═══════════════════════════
+CONDICAOCLINICA
+═══════════════════════════
+- Um bloco novo por cada combinação real de indicação + população + via com posologia diferente.
+- Só uma indicação/posologia no total? Usa um único bloco na mesma. Escreve sempre `populacao:`/`via:` — o sistema decide sozinho se mostra essa escolha ao utilizador; tu nunca decidas omitir.
+- `pesoMinimo`/`pesoMaximo`/`idadeMinima`/`idadeMaxima`: sempre "valor unidade" (ex. `pesoMinimo: 3 kg`, `idadeMaxima: 5 anos`). Omite o lado que a fonte não definir.
+
+═══════════════════════════
+DOSE E INTERVALO
+═══════════════════════════
+- Dose só, sem fases → usa os campos soltos: `doseMinima`/`doseMaxima`/`dosePadrao`/`unidadeDose`/`fatorUnidade`/`intervalo`.
+- Dose de ataque + manutenção (valores ou intervalos diferentes entre a primeira administração e as seguintes) → substitui os campos soltos por dois sub-blocos `ataque:` e `manutencao:`, cada um com o seu próprio conjunto completo dos mesmos seis campos.
+- `fatorUnidade` só quando `unidadeDose` não converte diretamente para miligramas (ex. UI, mEq) — escreve a massa equivalente a 1 unidade (ex. `fatorUnidade: 0.6 mcg`). Nunca uses isto para mg/g/mcg/kg.
+- `intervalo`: horas tal como a fonte der (ex. `12 h`, ou `12, 8, 6 h` se houver várias opções). Dose administrada uma única vez → escreve literalmente `dose única`.
+
+═══════════════════════════
+NOTAS
+═══════════════════════════
+- `notaExclusiva` (dentro de cada condicaoClinica): só o mais relevante e específico desta combinação (ex. "dose máxima diária: 3g", contraindicação grave desta posologia). Numera `1.`, `2.`, `3.` se houver mais que uma. Omite se não houver nada relevante.
+- `notaGeral` (uma vez, no fim do medicamento): relevante para o medicamento inteiro (preparo geral, contraindicações gerais, duração do tratamento) — nunca repetido por condição. Mesma numeração. A ÚLTIMA nota de `notaGeral` tem de ser sempre a referência da fonte, no formato: `Referencia: manual, página` (ex. `4. Referencia: MSF Essential Drugs Guidelines, p. 214`).
