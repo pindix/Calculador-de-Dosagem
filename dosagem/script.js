@@ -211,10 +211,34 @@ function unidadeBase(unidadeTexto) {
     return (unidadeTexto || '').toLowerCase().trim().split('/')[0].trim();
 }
 
-function converterParaMg(valor, unidadeTexto) {
+function converterParaMg(valor, unidadeTexto, concentracaoTexto, fatorUnidadeTexto) {
     const base = unidadeBase(unidadeTexto);
-    if (FATORES_MASSA_PARA_MG.hasOwnProperty(base)) return valor * FATORES_MASSA_PARA_MG[base];
-    return null; // unidade não linear (UI, mEq...) -- sem conversão automática
+    if (FATORES_MASSA_PARA_MG.hasOwnProperty(base)) {
+        return valor * FATORES_MASSA_PARA_MG[base];
+    }
+
+    // Unidade sem conversão linear (ex. UI, mEq): se a concentração desta
+    // linha já estiver na mesma unidade, os dois lados já são compatíveis
+    // -- não converte nada, o fatorUnidade fica sem uso.
+    const concentracaoTemMesmaUnidade = base && String(concentracaoTexto || '').toLowerCase().includes(base);
+    if (concentracaoTemMesmaUnidade) return valor;
+
+    // Concentração numa unidade diferente: usa o fatorUnidade fornecido
+    // (5º elemento de dose(...)), ex. "0.6 mcg" = 1 unidade da dose.
+    if (fatorUnidadeTexto) {
+        const texto = String(fatorUnidadeTexto).replace(',', '.').trim();
+        const m = texto.match(/^([\d.]+)\s*([a-zµ]+)$/i);
+        if (m) {
+            const valorPorUnidade = parseFloat(m[1]);
+            const unidadeResultante = m[2].toLowerCase();
+            const fatorParaMg = FATORES_MASSA_PARA_MG[unidadeResultante];
+            if (fatorParaMg !== undefined && !isNaN(valorPorUnidade)) {
+                return valor * valorPorUnidade * fatorParaMg;
+            }
+        }
+    }
+
+    return null; // sem informação suficiente para converter
 }
 
 /* ==========================================================================
@@ -440,19 +464,19 @@ function exibirCampos() {
         labelDosagem.textContent = "Dose";
         const partes = dose.simples.split(',').map(p => p.trim());
         if (!inputs.dosagem.value) inputs.dosagem.value = partes[2] || '';
-        txtUnidadeDosagem.innerText = partes.slice(3).join(',') || '';
+        txtUnidadeDosagem.innerText = partes[3] || '';
     } else {
         camposDivs.dosagem.style.display = "flex";
         labelDosagem.textContent = dose.temDuasFases ? "Dose (ataque)" : "Dose";
         const partesAtaque = dose.ataque.split(',').map(p => p.trim());
         if (!inputs.dosagem.value) inputs.dosagem.value = partesAtaque[2] || '';
-        txtUnidadeDosagem.innerText = partesAtaque.slice(3).join(',') || '';
+        txtUnidadeDosagem.innerText = partesAtaque[3] || '';
 
         if (dose.temDuasFases) {
             camposDivs.dosagemManutencao.style.display = "flex";
             const partesManut = dose.manutencao.split(',').map(p => p.trim());
             if (!inputs.dosagemManutencao.value) inputs.dosagemManutencao.value = partesManut[2] || '';
-            txtUnidadeDosagemManutencao.innerText = partesManut.slice(3).join(',') || '';
+            txtUnidadeDosagemManutencao.innerText = partesManut[3] || '';
         } else {
             camposDivs.dosagemManutencao.style.display = "none";
         }
@@ -523,31 +547,57 @@ function exibirCampos() {
         camposDivs.intervalo.style.display = "none";
         camposDivs.intervaloManutencaoWrapper.style.display = "none";
     } else if (intervalo.simples !== undefined) {
-        preencherSelectIntervalo(camposDivs.intervalo, intervalo.simples);
-        camposDivs.intervalo.style.display = "block";
+        const qtd = preencherSelectIntervalo(camposDivs.intervalo, intervalo.simples);
+        camposDivs.intervalo.style.display = qtd > 1 ? "block" : "none";
         camposDivs.intervaloManutencaoWrapper.style.display = "none";
     } else {
-        preencherSelectIntervalo(camposDivs.intervalo, intervalo.ataque);
-        camposDivs.intervalo.style.display = "block";
+        const qtdAtaque = preencherSelectIntervalo(camposDivs.intervalo, intervalo.ataque);
+        camposDivs.intervalo.style.display = qtdAtaque > 1 ? "block" : "none";
         if (intervalo.temDuasFases) {
-            preencherSelectIntervalo(camposDivs.intervaloManutencao, intervalo.manutencao);
-            camposDivs.intervaloManutencaoWrapper.style.display = "block";
+            const qtdManut = preencherSelectIntervalo(camposDivs.intervaloManutencao, intervalo.manutencao);
+            camposDivs.intervaloManutencaoWrapper.style.display = qtdManut > 1 ? "block" : "none";
         } else {
             camposDivs.intervaloManutencaoWrapper.style.display = "none";
         }
     }
 
-    camposDivs.dose.style.display = medAtivo.populacao ? "block" : "none";
+    // --- POPULAÇÃO: reconstruída a partir da base, com a regra "só 2+" ---
+    const populacoesUnicas = [...new Set(baseFiltrada
+        .filter(m => !condicoesUnicas.length || String(m.condicao || "").trim() === String(medAtivo.condicao || "").trim())
+        .map(m => m.populacao).filter(p => p && String(p).trim() !== ""))];
+
+    if (populacoesUnicas.length > 1) {
+        const assinaturaPop = populacoesUnicas.join("|");
+        if (assinaturaPop !== camposDivs.dose.getAttribute("data-assinatura-populacao")) {
+            const rotulos = { pediatrica: "Dose Pediátrica", adulta: "Dose Adulta", gravida: "Grávida" };
+            camposDivs.dose.innerHTML = "";
+            populacoesUnicas.forEach(p => {
+                const opt = document.createElement("option");
+                opt.value = String(p).trim().toLowerCase();
+                opt.innerText = rotulos[String(p).trim().toLowerCase()] || String(p).trim();
+                camposDivs.dose.appendChild(opt);
+            });
+            camposDivs.dose.setAttribute("data-assinatura-populacao", assinaturaPop);
+        }
+        camposDivs.dose.style.display = "block";
+    } else {
+        camposDivs.dose.style.display = "none";
+        camposDivs.dose.removeAttribute("data-assinatura-populacao");
+    }
+
     camposDivs.via.style.display = medAtivo.via ? "block" : "none";
 }
 
 function preencherSelectIntervalo(selectEl, textoIntervalo) {
     const novaAssinatura = String(textoIntervalo);
-    if (novaAssinatura === selectEl.getAttribute("data-intervalo-assinatura") && selectEl.options.length > 0) return;
+    const valores = novaAssinatura.split(",").map(h => h.trim()).filter(h => h !== "");
+    const valoresUnicos = [...new Set(valores)];
+
+    if (novaAssinatura === selectEl.getAttribute("data-intervalo-assinatura") && selectEl.options.length > 0) {
+        return valoresUnicos.length;
+    }
 
     selectEl.innerHTML = "";
-    const valores = novaAssinatura.split(",").map(h => h.trim());
-    const valoresUnicos = [...new Set(valores)];
 
     valoresUnicos.forEach(h => {
         const opt = document.createElement("option");
@@ -572,6 +622,7 @@ function preencherSelectIntervalo(selectEl, textoIntervalo) {
         selectEl.appendChild(opt);
     });
     selectEl.setAttribute("data-intervalo-assinatura", novaAssinatura);
+    return valoresUnicos.length;
 }
 
 /* ==========================================================================
@@ -686,41 +737,56 @@ function calcular() {
     }
 
     // --- AVISO DE REFERÊNCIA (não bloqueia): peso alto/baixo para a população ---
+    // Vai para as notas do resultado, em destaque -- não é mais um pop-up.
+    let notaReferenciaPeso = null;
     if (populacaoAtual && inputs.peso.value !== "") {
         if (populacaoAtual === 'adulta' && peso < REF_PESO_ADULTO_MIN) {
-            avisar(`⚠️ Peso baixo para dose adulta (referência interna: adulto > ${REF_PESO_ADULTO_MIN} kg). Pode indicar desnutrição — considera avaliação clínica individual.`);
+            notaReferenciaPeso = `Peso baixo para dose adulta (referência interna: adulto > ${REF_PESO_ADULTO_MIN} kg). Pode indicar desnutrição — considera avaliação clínica individual.`;
         } else if (populacaoAtual === 'pediatrica' && peso >= REF_PESO_ADULTO_MIN) {
-            avisar(`⚠️ Peso alto para dose pediátrica (referência interna: pediátrico ≤ ${REF_PESO_ADULTO_MIN} kg). Confirma se a dose adulta não é mais apropriada.`);
+            notaReferenciaPeso = `Peso alto para dose pediátrica (referência interna: pediátrico ≤ ${REF_PESO_ADULTO_MIN} kg). Confirma se a dose adulta não é mais apropriada.`;
         }
     }
 
     // --- CONCENTRAÇÃO ---
     let concentracao = 1;
-    const textoExibido = camposDivs.selConcentracao.style.display !== "none"
-        ? camposDivs.selConcentracao.options[camposDivs.selConcentracao.selectedIndex].text
-        : String(medAtivo.concentracao || "");
+    let textoExibido;
+    let indiceConcentracao = null; // 1-based; null = só há uma apresentação
     if (camposDivs.selConcentracao.style.display !== "none") {
+        textoExibido = camposDivs.selConcentracao.options[camposDivs.selConcentracao.selectedIndex].text;
         concentracao = parseFloat(camposDivs.selConcentracao.value) || 1;
+        indiceConcentracao = camposDivs.selConcentracao.selectedIndex + 1;
     } else {
-        const matchNumero = String(medAtivo.concentracao || "").match(/(\d+\.?\d*)/);
-        concentracao = matchNumero ? parseFloat(matchNumero[0]) : 1;
+        const concStr = String(medAtivo.concentracao || "").trim();
+        if (concStr.includes("|")) {
+            const pts = concStr.split("|");
+            textoExibido = pts[0].trim();
+            concentracao = parseFloat(pts[1]) || 1;
+        } else {
+            const matchNumero = concStr.match(/(\d+\.?\d*)/);
+            textoExibido = concStr;
+            concentracao = matchNumero ? parseFloat(matchNumero[0]) : 1;
+        }
     }
 
     // --- DOSE (ataque/manutenção) → mg ---
     const dose = interpretarDoseOuIntervalo(medAtivo.dose);
     let dAtaqueMg = null, dManutMg = null;
     if (dose.simples !== undefined && dose.simples !== '') {
-        const unidade = dose.simples.split(',').slice(3).join(',');
+        const partesDose = dose.simples.split(',').map(p => p.trim());
+        const unidade = partesDose[3] || '';
+        const fatorUnidade = partesDose[4] || '';
         const valor = parseFloat(inputs.dosagem.value) || 0;
-        dAtaqueMg = converterParaMg(valor, unidade); if (dAtaqueMg === null) dAtaqueMg = valor;
+        dAtaqueMg = converterParaMg(valor, unidade, textoExibido, fatorUnidade); if (dAtaqueMg === null) dAtaqueMg = valor;
         dManutMg = dAtaqueMg;
     } else if (dose.ataque !== undefined) {
-        const unidadeA = dose.ataque.split(',').slice(3).join(',');
-        const unidadeM = dose.manutencao.split(',').slice(3).join(',');
+        const partesA = dose.ataque.split(',').map(p => p.trim());
+        const partesM = dose.manutencao.split(',').map(p => p.trim());
+        const unidadeA = partesA[3] || '', fatorA = partesA[4] || '';
+        const unidadeM = partesM[3] || '', fatorM = partesM[4] || '';
         const valorA = parseFloat(inputs.dosagem.value) || 0;
         const valorM = dose.temDuasFases ? (parseFloat(inputs.dosagemManutencao.value) || 0) : valorA;
-        dAtaqueMg = converterParaMg(valorA, unidadeA); if (dAtaqueMg === null) dAtaqueMg = valorA;
-        dManutMg = converterParaMg(valorM, unidadeM); if (dManutMg === null) dManutMg = valorM;
+        dAtaqueMg = converterParaMg(valorA, unidadeA, textoExibido, fatorA); if (dAtaqueMg === null) dAtaqueMg = valorA;
+        dManutMg = converterParaMg(valorM, unidadeM, textoExibido, fatorM); if (dManutMg === null) dManutMg = valorM;
     }
 
     // --- INTERVALO (ataque/manutenção) → vezes/dia ---
@@ -817,27 +883,51 @@ function calcular() {
 
         // --- NOTAS: agora vêm de medAtivo.adicionais, não da fórmula ---
         const notasTexto = String(medAtivo.adicionais || "");
+        let notas = [];
+
+        // Filtra trechos [N] pela concentração escolhida -- texto antes do
+        // primeiro [N] é sempre geral; se só há uma concentração, ignora
+        // os marcadores e mostra tudo.
+        function filtrarNotaPorConcentracao(texto, indiceSelecionado) {
+            if (!/\[\d+\]/.test(texto)) return texto;
+            if (indiceSelecionado === null) return texto.replace(/\[\d+\]\s*/g, '').trim();
+            const partes = texto.split(/(\[\d+\])/);
+            let indiceAtual = null, resultado = "";
+            for (const parte of partes) {
+                const m = parte.match(/^\[(\d+)\]$/);
+                if (m) { indiceAtual = parseInt(m[1], 10); continue; }
+                if (indiceAtual === null || indiceAtual === indiceSelecionado) resultado += parte;
+            }
+            return resultado.replace(/\s+/g, ' ').trim();
+        }
+
+        if (notaReferenciaPeso) {
+            notas.push(`<span style="color: #ff9800; font-weight: 600; background: rgba(255, 152, 0, 0.15); padding: 4px 6px; border-radius: 12px; display: inline-block;">${notaReferenciaPeso}</span>`);
+        }
+
         if (notasTexto.trim() !== "") {
             let bruto = notasTexto.trim();
             if (!bruto.startsWith('#')) bruto = '#' + bruto;
             if (!bruto.endsWith('#')) bruto += '#';
             const partes = bruto.split('#');
-            let notas = [];
             for (let parte of partes) {
                 parte = parte.trim();
                 if (!parte) continue;
                 const isLixo = parte.includes('{') || parte.includes('}') || parte.match(/^[\d\.\s%]+$/);
                 if (isLixo) continue;
+                parte = filtrarNotaPorConcentracao(parte, indiceConcentracao);
+                if (!parte) continue;
                 parte = parte.replace(/@@([^@]+)@/g, (_, c) =>
                     `<span style="color: #ff9800; font-weight: 600; background: rgba(255, 152, 0, 0.15); padding: 4px 6px; border-radius: 12px; display: inline-block;">${c}</span>`
                 ).replace(/@/g, '').trim();
                 if (parte) notas.push(parte);
             }
-            if (notas.length > 0) {
-                resultadoHTML += `<div class="dosagem-notas"><div class="notas-titulo"><i class="ri-information-fill"></i><span>Informações Adicionais</span></div>`;
-                notas.forEach(n => { resultadoHTML += `<div class="nota-item"><i class="ri-information-line"></i><span>${n}</span></div>`; });
-                resultadoHTML += `</div>`;
-            }
+        }
+
+        if (notas.length > 0) {
+            resultadoHTML += `<div class="dosagem-notas"><div class="notas-titulo"><i class="ri-information-fill"></i><span>Informações Adicionais</span></div>`;
+            notas.forEach(n => { resultadoHTML += `<div class="nota-item"><i class="ri-information-line"></i><span>${n}</span></div>`; });
+            resultadoHTML += `</div>`;
         }
 
         // --- TOTAIS ---
