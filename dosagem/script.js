@@ -445,8 +445,15 @@ function exibirCampos() {
         if (wrapper) wrapper.style.display = "none";
         Object.values(camposDivs).forEach(div => { if (div) div.style.display = "none"; });
         pResultado.innerHTML = "";
+        exibirCampos._linhaAnterior = null;
         return;
     }
+
+    // Só preenche o valor padrão da dose quando a linha muda de facto --
+    // repetir isto a cada tecla impedia apagar o último algarismo, porque
+    // o campo ficava vazio por um instante e era logo reposto.
+    const linhaNova = exibirCampos._linhaAnterior !== medAtivo;
+    exibirCampos._linhaAnterior = medAtivo;
 
     // --- PESO / IDADE ---
     camposDivs.peso.style.display = medAtivo.peso ? "flex" : "none";
@@ -463,19 +470,19 @@ function exibirCampos() {
         camposDivs.dosagemManutencao.style.display = "none";
         labelDosagem.textContent = "Dose";
         const partes = dose.simples.split(',').map(p => p.trim());
-        if (!inputs.dosagem.value) inputs.dosagem.value = partes[2] || '';
+        if (linhaNova && !inputs.dosagem.value) inputs.dosagem.value = partes[2] || '';
         txtUnidadeDosagem.innerText = partes[3] || '';
     } else {
         camposDivs.dosagem.style.display = "flex";
         labelDosagem.textContent = dose.temDuasFases ? "Dose (ataque)" : "Dose";
         const partesAtaque = dose.ataque.split(',').map(p => p.trim());
-        if (!inputs.dosagem.value) inputs.dosagem.value = partesAtaque[2] || '';
+        if (linhaNova && !inputs.dosagem.value) inputs.dosagem.value = partesAtaque[2] || '';
         txtUnidadeDosagem.innerText = partesAtaque[3] || '';
 
         if (dose.temDuasFases) {
             camposDivs.dosagemManutencao.style.display = "flex";
             const partesManut = dose.manutencao.split(',').map(p => p.trim());
-            if (!inputs.dosagemManutencao.value) inputs.dosagemManutencao.value = partesManut[2] || '';
+            if (linhaNova && !inputs.dosagemManutencao.value) inputs.dosagemManutencao.value = partesManut[2] || '';
             txtUnidadeDosagemManutencao.innerText = partesManut[3] || '';
         } else {
             camposDivs.dosagemManutencao.style.display = "none";
@@ -583,6 +590,7 @@ function exibirCampos() {
     } else {
         camposDivs.dose.style.display = "none";
         camposDivs.dose.removeAttribute("data-assinatura-populacao");
+        camposDivs.dose.innerHTML = "";
     }
 
     camposDivs.via.style.display = medAtivo.via ? "block" : "none";
@@ -633,6 +641,9 @@ function avisar(m) {
     const pModal = document.getElementById("modalMensagem");
     document.body.classList.add("modal-aberto");
     if (modal.style.display === "flex") {
+        // Não empilha a mesma mensagem outra vez (ex. idade acima do teto
+        // pediátrico enquanto o utilizador continua a digitar)
+        if (pModal.innerHTML.includes(m)) return;
         pModal.insertAdjacentHTML('beforeend', "<hr style='margin:10px 0'>" + m);
     } else {
         pModal.innerHTML = m;
@@ -768,10 +779,28 @@ function calcular() {
         }
     }
 
+    // --- SEGURANÇA: DOSE (min/max), na mesma unidade exibida ao utilizador ---
+    function validarDose(inputEl, doseString, rotulo) {
+        if (!doseString || inputEl.value === "") return;
+        const partes = doseString.split(',').map(p => p.trim());
+        const minimo = parseFloat(partes[0]);
+        const maximo = parseFloat(partes[1]);
+        const unidade = partes[3] || '';
+        if (isNaN(minimo) || isNaN(maximo)) return;
+        const valor = parseFloat(inputEl.value);
+        if (valor < minimo || valor > maximo) {
+            const novaDose = valor < minimo ? minimo : maximo;
+            avisar(`⚠️ Dose${rotulo} inválida.<br>A dose tem de estar entre ${formatarNumero(minimo)} e ${formatarNumero(maximo)} ${unidade}.<br>
+            <strong>Corrigida para: ${formatarNumero(novaDose)} ${unidade}</strong>`);
+            inputEl.value = novaDose;
+        }
+    }
+
     // --- DOSE (ataque/manutenção) → mg ---
     const dose = interpretarDoseOuIntervalo(medAtivo.dose);
     let dAtaqueMg = null, dManutMg = null;
     if (dose.simples !== undefined && dose.simples !== '') {
+        validarDose(inputs.dosagem, dose.simples, "");
         const partesDose = dose.simples.split(',').map(p => p.trim());
         const unidade = partesDose[3] || '';
         const fatorUnidade = partesDose[4] || '';
@@ -779,6 +808,8 @@ function calcular() {
         dAtaqueMg = converterParaMg(valor, unidade, textoExibido, fatorUnidade); if (dAtaqueMg === null) dAtaqueMg = valor;
         dManutMg = dAtaqueMg;
     } else if (dose.ataque !== undefined) {
+        validarDose(inputs.dosagem, dose.ataque, " de ataque");
+        if (dose.temDuasFases) validarDose(inputs.dosagemManutencao, dose.manutencao, " de manutenção");
         const partesA = dose.ataque.split(',').map(p => p.trim());
         const partesM = dose.manutencao.split(',').map(p => p.trim());
         const unidadeA = partesA[3] || '', fatorA = partesA[4] || '';
@@ -1011,11 +1042,10 @@ inputNome.addEventListener("input", () => {
     });
 });
 
-// idade tem tratamento próprio: recalcula a linha E confere o teto pediátrico
+// idade recalcula a linha; o teto pediátrico já é conferido dentro de
+// escolherLinha() -- chamar aqui outra vez duplicava o aviso a cada tecla
 inputs.idade.addEventListener('input', () => {
     if (inputNome.value.trim() !== "") { escolherLinha('ajuste'); exibirCampos(); }
-    const populacaoAtual = (camposDivs.dose.value || "").toLowerCase();
-    if (populacaoAtual === 'pediatrica') verificarTetoPediatrico();
 });
 
 if (camposDivs.selDoenca) {
