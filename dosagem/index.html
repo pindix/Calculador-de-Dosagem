@@ -205,11 +205,13 @@
                     <div id="sugestoes_box"></div>
                 </div>
 
-                <div class="select-concentracao-wrapper" id="concentracaoWrapper" style="display: none;">
-                    <label class="label-concentracao">Concentração</label>
-                    <select id="selConcentracao">
-                        <option></option>
-                    </select>
+                <div class="custom-select" id="concentracaoSelect" style="display:none;">
+                    <div class="custom-select-trigger" onclick="toggleCustomSelect('concentracaoSelect')">
+                        <span class="floating-label">Concentração</span>
+                        <span id="concentracaoSelecionada">—</span>
+                        <i class="ri-arrow-down-s-line" id="concentracaoArrow"></i>
+                    </div>
+                    <div class="custom-select-options" id="concentracaoOptions"></div>
                 </div>
 
             </div>
@@ -264,8 +266,7 @@
                     <span id="unidade_de_dosagem" class="unidade-fixa">--</span>
                 </div>
 
-                <div class="entradas_de_dados floating-group" id="campo_de_dosagem_manutencao"
-                    style="display: none;">
+                <div class="entradas_de_dados floating-group" id="campo_de_dosagem_manutencao" style="display: none;">
                     <i class="ri-capsule-line"></i>
                     <input type="number" id="dosagem_manutencao" placeholder=" ">
                     <label class="label-flutuante">Dose (manutenção)</label>

@@ -50,6 +50,7 @@ const FATORES_MASSA_PARA_MG = {
 let bancoDados = {};
 let medAtivo = null;
 let fonteAtual = 'msf';
+let concentracaoMap = {};
 
 const ROTULOS_FONTE = { msf: 'Médicos Sem Fronteira', oms: 'OMS (Internacional)', angola: 'Angola' };
 const ICONES_FONTE = { msf: 'ri-earth-line', oms: 'ri-earth-line', angola: 'ri-government-line' };
@@ -78,7 +79,10 @@ const txtUnidadeDosagemManutencao = document.getElementById("unidade_de_dosagem_
 
 const linhaSecundaria = document.getElementById("linhaSecundaria");
 const linhaIntervaloDuplo = document.getElementById("linhaIntervaloDuplo");
-const selConcentracao = document.getElementById("selConcentracao");
+const concentracaoSelect = document.getElementById("concentracaoSelect");
+const concentracaoSelecionada = document.getElementById("concentracaoSelecionada");
+const concentracaoOptions = document.getElementById("concentracaoOptions");
+
 
 /* ---- 4. INTERPRETAÇÃO DE PESO/IDADE (operadores + unidades por extenso) ---- */
 function interpretarLadoNumerico(strBruta) {
@@ -307,6 +311,10 @@ function selecionarFonte(valor) {
     pResultado.innerHTML = `<div class="feedback-loading"><i class="ri-loader-4-line"></i><span>Carregando padrões da <strong>${nomeFonte}</strong>...</span></div>`;
     pResultado.style.background = "none";
     pResultado.style.display = "block";
+
+    // Mostra sucesso
+        pResultado.innerHTML = `<div class="feedback-success"><i class="ri-checkbox-circle-line"></i><span>Padrões da <strong>${nomeFonte}</strong> carregados com sucesso!</span></div>`;
+        
     
     // Atualiza a fonte após o feedback
     setTimeout(() => {
@@ -320,8 +328,6 @@ function selecionarFonte(valor) {
         localStorage.setItem('fonte', valor);
         notaFallback.style.display = 'none';
         
-        // Mostra sucesso
-        pResultado.innerHTML = `<div class="feedback-success"><i class="ri-checkbox-circle-line"></i><span>Padrões da <strong>${nomeFonte}</strong> carregados com sucesso!</span></div>`;
         
         // Limpa os campos
         inputNome.value = "";
@@ -333,11 +339,13 @@ function selecionarFonte(valor) {
         exibirCampos();
         
         // Esconde o feedback após 2 segundos
-        setTimeout(() => {
-            pResultado.innerHTML = "";
-            pResultado.style.display = "none";
-        }, 2000);
-    }, 300);
+        // setTimeout(() => {
+        //     pResultado.innerHTML = "";
+        //     pResultado.style.display = "none";
+        // }, 2000);
+    }, 5000);
+
+    
 }
 
 
@@ -765,29 +773,63 @@ function exibirCampos() {
     }
 
     // --- CONCENTRAÇÃO (select nativo, inalterado) ---
-    const concRaw = String(medAtivo.concentracao || "").trim();
-    const temMultiplas = concRaw.includes("|") && concRaw.includes(";");
-    if (temMultiplas) {
-        const assinaturaAtual = selConcentracao.getAttribute("data-assinatura");
-        if (concRaw !== assinaturaAtual) {
-            selConcentracao.innerHTML = "";
-            concRaw.split(";").forEach(g => {
-                const pts = g.split("|");
-                if (pts.length === 2) {
-                    const opt = document.createElement("option");
-                    opt.innerText = pts[0].trim(); opt.value = pts[1].trim();
-                    selConcentracao.appendChild(opt);
-                }
+    // --- CONCENTRAÇÃO (custom select estilo iOS) ---
+const concRaw = String(medAtivo.concentracao || "").trim();
+const temMultiplas = concRaw.includes("|") && concRaw.includes(";");
+
+if (temMultiplas) {
+    const opcoes = [];
+    const assinaturaAtual = concentracaoSelect.getAttribute("data-assinatura");
+    
+    if (concRaw !== assinaturaAtual) {
+        concRaw.split(";").forEach(g => {
+            const pts = g.split("|");
+            if (pts.length === 2) {
+                const label = pts[0].trim();
+                const valor = pts[1].trim();
+                opcoes.push({ 
+                    valor: valor, 
+                    texto: label,
+                    icone: 'ri-capsule-line'
+                });
+                concentracaoMap[valor] = { label, valorNumerico: parseFloat(valor) };
+            }
+        });
+        
+        // Só popula se houver opções
+        if (opcoes.length > 0) {
+            popularCustomSelect('concentracao', opcoes, (valor) => {
+                calcularSePronto();
             });
-            selConcentracao.setAttribute("data-assinatura", concRaw);
+            concentracaoSelect.setAttribute("data-assinatura", concRaw);
         }
-        if (concentracaoWrapper) concentracaoWrapper.style.display = "flex";
-        selConcentracao.style.display = "block";
-    } else {
-        if (concentracaoWrapper) concentracaoWrapper.style.display = "none";
-        selConcentracao.style.display = "none";
-        selConcentracao.removeAttribute("data-assinatura");
     }
+    
+    concentracaoSelect.style.display = "block";
+    // Atualiza o valor selecionado se existir
+    const valorAtual = concentracaoSelect.dataset.valorAtual || '';
+    if (valorAtual) {
+        const span = document.getElementById('concentracaoSelecionada');
+        const opcao = opcoes.find(o => o.valor === valorAtual);
+        if (opcao) span.textContent = opcao.texto;
+    }
+    
+} else {
+    concentracaoSelect.style.display = "none";
+    concentracaoSelect.removeAttribute("data-assinatura");
+    // Se não tem múltiplas, a concentração é única
+    if (concRaw) {
+        // Guarda como opção única
+        concentracaoMap['unica'] = { 
+            label: concRaw, 
+            valorNumerico: parseFloat(concRaw.match(/(\d+\.?\d*)/)?.[0] || 1) 
+        };
+        // Define como selecionado
+        const span = document.getElementById('concentracaoSelecionada');
+        if (span) span.textContent = concRaw;
+        concentracaoSelect.dataset.valorAtual = 'unica';
+    }
+}
 
     // --- POPULAÇÃO ---
     const populacoesUnicas = [...new Set(baseFiltrada
@@ -977,20 +1019,32 @@ function calcular() {
     }
 
     let concentracao = 1, textoExibido, indiceConcentracao = null;
-    if (selConcentracao.style.display !== "none") {
-        textoExibido = selConcentracao.options[selConcentracao.selectedIndex].text;
-        concentracao = parseFloat(selConcentracao.value) || 1;
-        indiceConcentracao = selConcentracao.selectedIndex + 1;
+const valorSelecionado = concentracaoSelect.dataset.valorAtual || '';
+
+if (valorSelecionado && concentracaoMap[valorSelecionado]) {
+    const dados = concentracaoMap[valorSelecionado];
+    textoExibido = dados.label;
+    concentracao = dados.valorNumerico || 1;
+    // Para o índice, precisamos da posição
+    const opcoes = concentracaoSelect.querySelectorAll('.custom-select-option');
+    let idx = 0;
+    opcoes.forEach((opt, i) => {
+        if (opt.dataset.value === valorSelecionado) idx = i + 1;
+    });
+    indiceConcentracao = idx || null;
+} else {
+    // Fallback: tentar extrair da string
+    const concStr = String(medAtivo.concentracao || "").trim();
+    if (concStr.includes("|")) {
+        const pts = concStr.split("|");
+        textoExibido = pts[0].trim();
+        concentracao = parseFloat(pts[1]) || 1;
     } else {
-        const concStr = String(medAtivo.concentracao || "").trim();
-        if (concStr.includes("|")) {
-            const pts = concStr.split("|");
-            textoExibido = pts[0].trim(); concentracao = parseFloat(pts[1]) || 1;
-        } else {
-            const matchNumero = concStr.match(/(\d+\.?\d*)/);
-            textoExibido = concStr; concentracao = matchNumero ? parseFloat(matchNumero[0]) : 1;
-        }
+        const matchNumero = concStr.match(/(\d+\.?\d*)/);
+        textoExibido = concStr;
+        concentracao = matchNumero ? parseFloat(matchNumero[0]) : 1;
     }
+}
 
     function validarDose(inputEl, doseString, rotulo) {
         if (!doseString || inputEl.value === "") return;
@@ -1200,8 +1254,6 @@ function limpar() {
     inputs.dosagem.value = ""; inputs.dosagemManutencao.value = "";
     medAtivo = null; exibirCampos(); pResultado.innerHTML = "";
 }
-
-selConcentracao.addEventListener('change', () => calcularSePronto());
 
 inputNome.addEventListener("input", () => {
     const valor = inputNome.value.trim();
