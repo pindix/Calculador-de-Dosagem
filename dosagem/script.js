@@ -490,7 +490,7 @@ function gerirSugestoes() {
                 ${nome.substring(0, indexHighlight)}<strong style="color:var(--primary);">${nome.substring(indexHighlight, indexHighlight + termo.length)}</strong>${nome.substring(indexHighlight + termo.length)}
             </div>
             <div style="font-size:0.6rem;color:var(--text);opacity:0.4;letter-spacing:0.3px;">
-                ${rotuloFonte}
+               Referência: ${rotuloFonte}
             </div>
         `;
         
@@ -546,7 +546,7 @@ function gerirSugestoes() {
                     ${nome.substring(0, indexHighlight)}<strong style="color:var(--primary);font-weight:500;">${nome.substring(indexHighlight, indexHighlight + termo.length)}</strong>${nome.substring(indexHighlight + termo.length)}
                 </div>
                 <div style="font-size:0.55rem;color:var(--text);opacity:0.3;letter-spacing:0.3px;">
-                    ${rotuloFonte}
+                   Referência: ${rotuloFonte}
                 </div>
             `;
             
@@ -583,6 +583,9 @@ function escolherLinha(modo) {
     let filtradas = (bancoDados[fonteAtual] || []).filter(m => nomeCorresponde(m, nome));
     notaFallback.style.display = "none";
 
+    // Guarda a fonte original (a que o utilizador selecionou)
+    const fonteOriginal = fonteAtual;
+
     if (filtradas.length === 0) {
         // Procura em QUALQUER outra fonte carregada que tenha o medicamento
         const outrasFontesComOMedicamento = Object.keys(bancoDados)
@@ -591,38 +594,49 @@ function escolherLinha(modo) {
 
         if (outrasFontesComOMedicamento.length > 0) {
             const fonteEncontrada = outrasFontesComOMedicamento[0];
-            const fonteAntiga = fonteAtual;
             filtradas = bancoDados[fonteEncontrada].filter(m => nomeCorresponde(m, nome));
             
-            // Mostra feedback de mudança de referência
-            const rotuloAntigo = ROTULOS_FONTE[fonteAntiga] || fonteAntiga;
-            const rotuloNovo = ROTULOS_FONTE[fonteEncontrada] || fonteEncontrada;
+            const rotuloOriginal = ROTULOS_FONTE[fonteOriginal] || fonteOriginal;
+            const rotuloEncontrado = ROTULOS_FONTE[fonteEncontrada] || fonteEncontrada;
             
-            // Atualiza a fonte silenciosamente
-            fonteAtual = fonteEncontrada;
+            // NÃO muda a fonteAtual! Mantém a original.
+            // Só guarda a fonte encontrada para uso interno
+            const fonteUsada = fonteEncontrada;
             
-            // Sincroniza o select de fonte visualmente
-            const spanFonte = document.getElementById('fonteSelecionada');
-            if (spanFonte) spanFonte.innerHTML = `<i class="${ICONES_FONTE[fonteEncontrada] || 'ri-earth-line'}"></i> ${rotuloNovo}`;
-            document.querySelectorAll('#fonteOptions .custom-select-option').forEach(opt => {
-                opt.classList.toggle('selecionado', opt.dataset.value === fonteEncontrada);
-            });
-            
-            // Mostra a nota de fallback
-            notaFallback.innerHTML = `<i class="ri-information-line"></i><span>"${inputNome.value.trim()}" não está disponível para a referência "${rotuloAntigo}". O sistema mudou para a referência "${rotuloNovo}".</span>`;
+            // Mostra a nota de fallback (PERMANENTE)
+            notaFallback.innerHTML = `<i class="ri-information-line"></i><span>"${inputNome.value.trim()}" não está disponível para a referência "${rotuloOriginal}". A dose apresentada é baseada na referência "${rotuloEncontrado}".</span>`;
             notaFallback.style.display = "flex";
             
-            // Salva a nova fonte
-            localStorage.setItem('fonte', fonteEncontrada);
+            // Guarda que estamos a usar uma fonte diferente
+            medAtivo = filtradas[0];
+            medAtivo._fonteUsada = fonteUsada; // marca que veio de outra fonte
+            medAtivo._fonteOriginal = fonteOriginal;
+            
+            // Aplica os filtros adicionais
+            aplicarFiltrosAdicionais();
+            return;
         }
     }
 
     if (filtradas.length === 0) { 
         medAtivo = null; 
+        notaFallback.style.display = "none";
         return; 
     }
 
-    // Aplica os filtros adicionais (população, via, condição, etc.)
+    // Se chegou aqui, o medicamento existe na fonte atual
+    medAtivo = filtradas[0];
+    medAtivo._fonteUsada = fonteAtual;
+    medAtivo._fonteOriginal = fonteAtual;
+    
+    // Aplica os filtros adicionais
+    aplicarFiltrosAdicionais();
+}
+
+// Função auxiliar para aplicar os filtros (evita duplicação)
+function aplicarFiltrosAdicionais() {
+    if (!medAtivo) return;
+    
     const populacaoSel = valorCustomSelect('populacao').toLowerCase();
     const viaSel = valorCustomSelect('via').toLowerCase();
     const condicaoSel = valorCustomSelect('condicao').toLowerCase();
@@ -630,6 +644,8 @@ function escolherLinha(modo) {
     const idadeVal = parseFloat(inputs.idade.value) || 0;
     const fatorIdade = parseFloat(document.getElementById('tempLocalSelect').dataset.valorAtual) || 365;
     const idadeDias = idadeVal * fatorIdade;
+
+    let filtradas = [medAtivo];
 
     if (condicaoSel) { 
         const t = filtradas.filter(m => String(m.condicao || "").toLowerCase().trim() === condicaoSel); 
@@ -652,10 +668,18 @@ function escolherLinha(modo) {
         if (t.length) filtradas = t; 
     }
 
-    medAtivo = filtradas[0];
+    medAtivo = filtradas[0] || medAtivo;
 
     if (populacaoSel === 'pediatrica' || (medAtivo && medAtivo.populacao && medAtivo.populacao.toLowerCase() === 'pediatrica')) {
         verificarTetoPediatrico();
+    }
+    
+    // Se estamos a usar uma fonte diferente, mostra a nota (caso tenha sido removida)
+    if (medAtivo && medAtivo._fonteUsada && medAtivo._fonteUsada !== fonteAtual) {
+        const rotuloOriginal = ROTULOS_FONTE[medAtivo._fonteOriginal] || medAtivo._fonteOriginal;
+        const rotuloUsado = ROTULOS_FONTE[medAtivo._fonteUsada] || medAtivo._fonteUsada;
+        notaFallback.innerHTML = `<i class="ri-information-line"></i><span>"${inputNome.value.trim()}" não está disponível para a referência "${rotuloOriginal}". A dose apresentada é baseada na referência "${rotuloUsado}".</span>`;
+        notaFallback.style.display = "flex";
     }
 }
 function verificarTetoPediatrico() {
