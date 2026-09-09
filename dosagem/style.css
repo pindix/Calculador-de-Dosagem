@@ -1071,6 +1071,44 @@ html, body {
     color: green;
 }
 
+
+/* ===== SCROLLBAR CUSTOMIZADA PARA SUGESTÕES ===== */
+#sugestoes_box::-webkit-scrollbar {
+    width: 4px;
+}
+
+#sugestoes_box::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 4px;
+}
+
+#sugestoes_box::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 4px;
+    opacity: 0.5;
+}
+
+#sugestoes_box::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+    opacity: 0.8;
+}
+
+/* Firefox */
+#sugestoes_box {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) transparent;
+}
+
+/* Tema escuro */
+[data-theme="dark"] #sugestoes_box::-webkit-scrollbar-thumb {
+    background: rgba(0, 132, 61, 0.6);
+}
+
+[data-theme="dark"] #sugestoes_box {
+    scrollbar-color: rgba(0, 132, 61, 0.6) transparent;
+}
+
+
 @keyframes fadeIn {
     from {
         opacity: 0;
