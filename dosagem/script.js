@@ -443,38 +443,58 @@ function gerirSugestoes() {
 
     divSugestoes.innerHTML = "";
     divSugestoes.style.display = "block";
-    
-    // Estilo base para cada item
-    const estiloItem = `
-        padding: 10px 14px;
-        cursor: pointer;
-        border-radius: 8px;
-        transition: background 0.15s ease;
-        margin: 2px 0;
+    divSugestoes.style.cssText = `
+        display: block;
+        background: var(--card-bg);
+        border-radius: 16px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        overflow: hidden;
+        padding: 8px 0;
+        max-height: 320px;
+        overflow-y: auto;
     `;
 
-    const estiloItemHover = `
-        background: rgba(0, 132, 61, 0.06);
+    // Estilo iOS para cada item
+    const estiloItem = `
+        padding: 12px 16px;
+        cursor: pointer;
+        transition: background 0.15s ease;
+        border-bottom: 1px solid rgba(0,0,0,0.04);
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    `;
+
+    // Container para os items (com scroll)
+    const container = document.createElement('div');
+    container.style.cssText = `
+        max-height: 320px;
+        overflow-y: auto;
+        position: relative;
     `;
 
     // Primeiro: resultados da fonte atual
-    daFonteAtual.slice(0, 6).forEach(item => {
+    daFonteAtual.slice(0, 6).forEach((item, index) => {
         const div = document.createElement("div");
         const nome = item.nome;
-        const index = nome.toLowerCase().indexOf(termo);
+        const indexHighlight = nome.toLowerCase().indexOf(termo);
         const rotuloFonte = ROTULOS_FONTE[item.fonte] || item.fonte;
         
         div.style.cssText = estiloItem;
+        div.style.borderBottom = index === daFonteAtual.slice(0,6).length - 1 && deOutrasFontes.length === 0 
+            ? 'none' 
+            : '1px solid rgba(0,0,0,0.04)';
+        
         div.innerHTML = `
-            <div style="font-weight:500;font-size:0.9rem;color:var(--text);line-height:1.4;">
-                ${nome.substring(0, index)}<strong>${nome.substring(index, index + termo.length)}</strong>${nome.substring(index + termo.length)}
+            <div style="font-weight:500;font-size:0.95rem;color:var(--text);line-height:1.3;">
+                ${nome.substring(0, indexHighlight)}<strong style="color:var(--primary);">${nome.substring(indexHighlight, indexHighlight + termo.length)}</strong>${nome.substring(indexHighlight + termo.length)}
             </div>
-            <div style="font-size:0.6rem;opacity:0.5;color:var(--text);margin-top:2px;">
-                Referência: ${rotuloFonte}
+            <div style="font-size:0.6rem;color:var(--text);opacity:0.4;letter-spacing:0.3px;">
+                ${rotuloFonte}
             </div>
         `;
         
-        div.onmouseenter = () => { div.style.background = 'rgba(0, 132, 61, 0.06)'; };
+        div.onmouseenter = () => { div.style.background = 'rgba(0, 132, 61, 0.05)'; };
         div.onmouseleave = () => { div.style.background = 'transparent'; };
         
         div.onclick = () => {
@@ -483,50 +503,54 @@ function gerirSugestoes() {
             escolherLinha('silencioso');
             exibirCampos();
         };
-        divSugestoes.appendChild(div);
+        container.appendChild(div);
     });
 
-    // Se houver resultados de outras fontes, adiciona linha divisória
+    // Se houver resultados de outras fontes, adiciona cabeçalho sticky
     if (deOutrasFontes.length > 0) {
-        const divisor = document.createElement("div");
-        divisor.style.cssText = `
+        // Cabeçalho sticky
+        const stickyHeader = document.createElement("div");
+        stickyHeader.style.cssText = `
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: var(--card-bg);
+            padding: 10px 16px 8px 16px;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 10px 4px 6px 4px;
-            margin: 4px 0 2px 0;
-            font-size: 0.6rem;
-            font-weight: 500;
-            color: #999;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
+            gap: 10px;
         `;
-        divisor.innerHTML = `
+        stickyHeader.innerHTML = `
             <span style="flex:1;height:1px;background:rgba(0,0,0,0.08);"></span>
-            <span>Outras referências</span>
+            <span style="font-size:0.55rem;font-weight:600;color:#999;text-transform:uppercase;letter-spacing:0.8px;">Outras referências</span>
             <span style="flex:1;height:1px;background:rgba(0,0,0,0.08);"></span>
         `;
-        divSugestoes.appendChild(divisor);
+        container.appendChild(stickyHeader);
 
-        // Depois: resultados de outras fontes (mais desfocados)
-        deOutrasFontes.slice(0, 6).forEach(item => {
+        // Depois: resultados de outras fontes (mais suaves)
+        deOutrasFontes.slice(0, 6).forEach((item, index) => {
             const div = document.createElement("div");
             const nome = item.nome;
-            const index = nome.toLowerCase().indexOf(termo);
+            const indexHighlight = nome.toLowerCase().indexOf(termo);
             const rotuloFonte = ROTULOS_FONTE[item.fonte] || item.fonte;
             
             div.style.cssText = estiloItem;
             div.style.opacity = "0.7";
+            div.style.borderBottom = index === deOutrasFontes.slice(0,6).length - 1 
+                ? 'none' 
+                : '1px solid rgba(0,0,0,0.03)';
+            
             div.innerHTML = `
-                <div style="font-weight:500;font-size:0.85rem;color:var(--text);line-height:1.4;">
-                    ${nome.substring(0, index)}<strong>${nome.substring(index, index + termo.length)}</strong>${nome.substring(index + termo.length)}
+                <div style="font-weight:400;font-size:0.9rem;color:var(--text);line-height:1.3;">
+                    ${nome.substring(0, indexHighlight)}<strong style="color:var(--primary);font-weight:500;">${nome.substring(indexHighlight, indexHighlight + termo.length)}</strong>${nome.substring(indexHighlight + termo.length)}
                 </div>
-                <div style="font-size:0.55rem;opacity:0.4;color:var(--text);margin-top:2px;">
-                    Referência: ${rotuloFonte}
+                <div style="font-size:0.55rem;color:var(--text);opacity:0.3;letter-spacing:0.3px;">
+                    ${rotuloFonte}
                 </div>
             `;
             
-            div.onmouseenter = () => { div.style.background = 'rgba(0, 132, 61, 0.04)'; };
+            div.onmouseenter = () => { div.style.background = 'rgba(0, 132, 61, 0.03)'; };
             div.onmouseleave = () => { div.style.background = 'transparent'; };
             
             div.onclick = () => {
@@ -535,10 +559,13 @@ function gerirSugestoes() {
                 escolherLinha('silencioso');
                 exibirCampos();
             };
-            divSugestoes.appendChild(div);
+            container.appendChild(div);
         });
     }
+
+    divSugestoes.appendChild(container);
 }
+
 
 document.addEventListener('click', (e) => {
     if (!inputNome.contains(e.target) && !divSugestoes.contains(e.target)) divSugestoes.style.display = "none";
