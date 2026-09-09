@@ -1749,8 +1749,7 @@ body.modal-aberto::before {
     margin-bottom: 8px;
 }
 
-/* --- Pares fixos (peso/idade, dose/manutenção): grid 1fr 1fr; se só um
-   campo estiver visível, o JS acrescenta .par-unico e vira 1 coluna só --- */
+/* --- Pares fixos (peso/idade, dose/manutenção) --- */
 .par-campos {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1758,23 +1757,19 @@ body.modal-aberto::before {
     width: 100%;
 }
 
+/* Quando tem apenas 1 campo visível */
 .par-campos.par-unico {
     grid-template-columns: 1fr;
 }
 
-/* Para dose de ataque + manutenção */
+/* Quando tem dose de ataque + manutenção (2 campos) */
 .par-campos.dose-dupla {
     grid-template-columns: 1fr 1fr;
 }
 
-/* Responsivo para telas muito pequenas */
+/* Responsivo */
 @media (max-width: 480px) {
     .par-campos {
-        gap: 8px;
-    }
-    
-    .par-campos.dose-dupla {
-        grid-template-columns: 1fr 1fr;
         gap: 8px;
     }
 }
@@ -1783,18 +1778,6 @@ body.modal-aberto::before {
     .par-campos {
         gap: 6px;
     }
-    
-    .par-campos.dose-dupla {
-        grid-template-columns: 1fr 1fr;
-        gap: 6px;
-    }
-}
-
-
-
-
-.par-campos.par-unico {
-    grid-template-columns: 1fr;
 }
 
 /* --- Linha partilhada via/intervalo/população: flex, reparte o espaço
