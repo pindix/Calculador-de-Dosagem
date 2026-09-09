@@ -410,15 +410,11 @@ function gerirSugestoes() {
         });
     });
 
-    // Remove duplicados, mantendo a primeira ocorrência (prioridade à fonte atual)
+    // Remove duplicados (mesmo nome, mesma fonte)
     const vistos = new Set();
     const nomesUnicos = [];
-    // Primeiro adiciona os da fonte atual (prioridade)
-    const daFonteAtual = todosNomes.filter(item => item.fonte === fonteAtual);
-    const deOutrasFontes = todosNomes.filter(item => item.fonte !== fonteAtual);
-    
-    [...daFonteAtual, ...deOutrasFontes].forEach(item => {
-        const chave = item.nome.toLowerCase();
+    todosNomes.forEach(item => {
+        const chave = `${item.nome.toLowerCase()}|${item.fonte}`;
         if (!vistos.has(chave)) {
             vistos.add(chave);
             nomesUnicos.push(item);
@@ -441,20 +437,45 @@ function gerirSugestoes() {
         return; 
     }
 
+    // Separa por fonte
+    const daFonteAtual = nomesUnicos.filter(item => item.fonte === fonteAtual);
+    const deOutrasFontes = nomesUnicos.filter(item => item.fonte !== fonteAtual);
+
     divSugestoes.innerHTML = "";
     divSugestoes.style.display = "block";
     
-    nomesUnicos.slice(0, 6).forEach(item => {
+    // Estilo base para cada item
+    const estiloItem = `
+        padding: 10px 14px;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: background 0.15s ease;
+        margin: 2px 0;
+    `;
+
+    const estiloItemHover = `
+        background: rgba(0, 132, 61, 0.06);
+    `;
+
+    // Primeiro: resultados da fonte atual
+    daFonteAtual.slice(0, 6).forEach(item => {
         const div = document.createElement("div");
-        div.className = "sugestao_item";
-        
-        // Destaca o termo no nome
         const nome = item.nome;
         const index = nome.toLowerCase().indexOf(termo);
+        const rotuloFonte = ROTULOS_FONTE[item.fonte] || item.fonte;
+        
+        div.style.cssText = estiloItem;
         div.innerHTML = `
-            ${nome.substring(0, index)}<strong>${nome.substring(index, index + termo.length)}</strong>${nome.substring(index + termo.length)}
-            ${item.fonte !== fonteAtual ? `<span style="font-size:0.6rem;opacity:0.5;margin-left:6px;">(${ROTULOS_FONTE[item.fonte] || item.fonte})</span>` : ''}
+            <div style="font-weight:500;font-size:0.9rem;color:var(--text);line-height:1.4;">
+                ${nome.substring(0, index)}<strong>${nome.substring(index, index + termo.length)}</strong>${nome.substring(index + termo.length)}
+            </div>
+            <div style="font-size:0.6rem;opacity:0.5;color:var(--text);margin-top:2px;">
+                Referência: ${rotuloFonte}
+            </div>
         `;
+        
+        div.onmouseenter = () => { div.style.background = 'rgba(0, 132, 61, 0.06)'; };
+        div.onmouseleave = () => { div.style.background = 'transparent'; };
         
         div.onclick = () => {
             inputNome.value = nome;
@@ -464,6 +485,59 @@ function gerirSugestoes() {
         };
         divSugestoes.appendChild(div);
     });
+
+    // Se houver resultados de outras fontes, adiciona linha divisória
+    if (deOutrasFontes.length > 0) {
+        const divisor = document.createElement("div");
+        divisor.style.cssText = `
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 4px 6px 4px;
+            margin: 4px 0 2px 0;
+            font-size: 0.6rem;
+            font-weight: 500;
+            color: #999;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        `;
+        divisor.innerHTML = `
+            <span style="flex:1;height:1px;background:rgba(0,0,0,0.08);"></span>
+            <span>Outras referências</span>
+            <span style="flex:1;height:1px;background:rgba(0,0,0,0.08);"></span>
+        `;
+        divSugestoes.appendChild(divisor);
+
+        // Depois: resultados de outras fontes (mais desfocados)
+        deOutrasFontes.slice(0, 6).forEach(item => {
+            const div = document.createElement("div");
+            const nome = item.nome;
+            const index = nome.toLowerCase().indexOf(termo);
+            const rotuloFonte = ROTULOS_FONTE[item.fonte] || item.fonte;
+            
+            div.style.cssText = estiloItem;
+            div.style.opacity = "0.7";
+            div.innerHTML = `
+                <div style="font-weight:500;font-size:0.85rem;color:var(--text);line-height:1.4;">
+                    ${nome.substring(0, index)}<strong>${nome.substring(index, index + termo.length)}</strong>${nome.substring(index + termo.length)}
+                </div>
+                <div style="font-size:0.55rem;opacity:0.4;color:var(--text);margin-top:2px;">
+                    Referência: ${rotuloFonte}
+                </div>
+            `;
+            
+            div.onmouseenter = () => { div.style.background = 'rgba(0, 132, 61, 0.04)'; };
+            div.onmouseleave = () => { div.style.background = 'transparent'; };
+            
+            div.onclick = () => {
+                inputNome.value = nome;
+                divSugestoes.style.display = "none";
+                escolherLinha('silencioso');
+                exibirCampos();
+            };
+            divSugestoes.appendChild(div);
+        });
+    }
 }
 
 document.addEventListener('click', (e) => {
