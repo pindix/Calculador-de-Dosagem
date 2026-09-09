@@ -705,10 +705,9 @@ function exibirCampos() {
         inputs.peso.value = ""; inputs.idade.value = "";
         inputs.dosagem.value = ""; inputs.dosagemManutencao.value = "";
         [parPesoIdade, parDose, linhaSecundaria, linhaIntervaloDuplo].forEach(el => el && (el.style.display = "none"));
-        ['viaSelect', 'intervaloSelect', 'populacaoSelect', 'condicaoSelect', 'intervaloManutencaoSelect'].forEach(id => {
+        ['viaSelect', 'intervaloSelect', 'populacaoSelect', 'condicaoSelect', 'intervaloManutencaoSelect', 'concentracaoSelect'].forEach(id => {
             const el = document.getElementById(id); if (el) el.style.display = "none";
         });
-        if (concentracaoWrapper) concentracaoWrapper.style.display = "none";
         pResultado.innerHTML = "";
         notaFallback.style.display = "none";
         exibirCampos._linhaAnterior = null;
@@ -718,41 +717,73 @@ function exibirCampos() {
     const linhaNova = exibirCampos._linhaAnterior !== medAtivo;
     exibirCampos._linhaAnterior = medAtivo;
 
+    // --- PAR PESO / IDADE ---
     parPesoIdade.style.display = "grid";
-    campoPeso.style.display = medAtivo.peso ? "flex" : "none";
-    campoIdade.style.display = medAtivo.idade ? "flex" : "none";
-    parPesoIdade.classList.toggle('par-unico', !(medAtivo.peso && medAtivo.idade));
+    const temPeso = medAtivo.peso && medAtivo.peso.trim() !== "";
+    const temIdade = medAtivo.idade && medAtivo.idade.trim() !== "";
+    
+    campoPeso.style.display = temPeso ? "flex" : "none";
+    campoIdade.style.display = temIdade ? "flex" : "none";
+    
+    // Se só um campo estiver visível, ocupa toda a largura
+    if (temPeso && !temIdade) {
+        parPesoIdade.classList.add('par-unico');
+        parPesoIdade.classList.remove('dose-dupla');
+    } else if (!temPeso && temIdade) {
+        parPesoIdade.classList.add('par-unico');
+        parPesoIdade.classList.remove('dose-dupla');
+    } else {
+        parPesoIdade.classList.remove('par-unico');
+        parPesoIdade.classList.remove('dose-dupla');
+    }
 
-    // --- DOSE ---
+    // --- PAR DOSE / DOSE MANUTENÇÃO ---
     const dose = interpretarDoseOuIntervalo(medAtivo.dose);
-    if (!medAtivo.dose || dose.simples === '') {
+    const temDose = medAtivo.dose && medAtivo.dose.trim() !== "";
+    const temDoseManutencao = dose.temDuasFases && dose.manutencao && dose.manutencao.trim() !== "";
+
+    if (!temDose) {
         parDose.style.display = "none";
-    } else if (dose.simples !== undefined) {
-        parDose.style.display = "grid";
-        campoDosagem.style.display = "flex";
-        campoDosagemManutencao.style.display = "none";
-        parDose.classList.add('par-unico');
-        labelDosagem.textContent = "Dose";
-        const partes = dose.simples.split(',').map(p => p.trim());
-        if (linhaNova && !inputs.dosagem.value) inputs.dosagem.value = partes[2] || '';
-        txtUnidadeDosagem.innerText = partes[3] || '';
     } else {
         parDose.style.display = "grid";
-        campoDosagem.style.display = "flex";
-        labelDosagem.textContent = dose.temDuasFases ? "Dose (ataque)" : "Dose";
-        const partesAtaque = dose.ataque.split(',').map(p => p.trim());
-        if (linhaNova && !inputs.dosagem.value) inputs.dosagem.value = partesAtaque[2] || '';
-        txtUnidadeDosagem.innerText = partesAtaque[3] || '';
-
-        if (dose.temDuasFases) {
+        parDose.classList.remove('par-unico');
+        
+        if (temDoseManutencao) {
+            // Duas doses: ataque + manutenção
+            campoDosagem.style.display = "flex";
             campoDosagemManutencao.style.display = "flex";
-            parDose.classList.remove('par-unico');
+            parDose.classList.add('dose-dupla');
+            labelDosagem.textContent = "Dose (ataque)";
+            
+            const partesAtaque = dose.ataque.split(',').map(p => p.trim());
+            if (linhaNova && !inputs.dosagem.value) inputs.dosagem.value = partesAtaque[2] || '';
+            txtUnidadeDosagem.innerText = partesAtaque[3] || '';
+            
             const partesManut = dose.manutencao.split(',').map(p => p.trim());
             if (linhaNova && !inputs.dosagemManutencao.value) inputs.dosagemManutencao.value = partesManut[2] || '';
             txtUnidadeDosagemManutencao.innerText = partesManut[3] || '';
-        } else {
+            
+        } else if (dose.simples !== undefined && dose.simples !== '') {
+            // Dose única
+            campoDosagem.style.display = "flex";
             campoDosagemManutencao.style.display = "none";
             parDose.classList.add('par-unico');
+            labelDosagem.textContent = "Dose";
+            
+            const partes = dose.simples.split(',').map(p => p.trim());
+            if (linhaNova && !inputs.dosagem.value) inputs.dosagem.value = partes[2] || '';
+            txtUnidadeDosagem.innerText = partes[3] || '';
+            
+        } else {
+            // Fallback: dose simples (sem ataque/manutencao explícito)
+            campoDosagem.style.display = "flex";
+            campoDosagemManutencao.style.display = "none";
+            parDose.classList.add('par-unico');
+            labelDosagem.textContent = "Dose";
+            
+            const partes = dose.ataque.split(',').map(p => p.trim());
+            if (linhaNova && !inputs.dosagem.value) inputs.dosagem.value = partes[2] || '';
+            txtUnidadeDosagem.innerText = partes[3] || '';
         }
     }
 
@@ -770,64 +801,58 @@ function exibirCampos() {
         condicaoSelectEl.dataset.valorAtual = "";
     }
 
-    // --- CONCENTRAÇÃO (select nativo, inalterado) ---
-    // --- CONCENTRAÇÃO (custom select estilo iOS) ---
-const concRaw = String(medAtivo.concentracao || "").trim();
-const temMultiplas = concRaw.includes("|") && concRaw.includes(";");
+    // --- CONCENTRAÇÃO ---
+    const concRaw = String(medAtivo.concentracao || "").trim();
+    const temMultiplas = concRaw.includes("|") && concRaw.includes(";");
 
-if (temMultiplas) {
-    const opcoes = [];
-    const assinaturaAtual = concentracaoSelect.getAttribute("data-assinatura");
-    
-    if (concRaw !== assinaturaAtual) {
-        concRaw.split(";").forEach(g => {
-            const pts = g.split("|");
-            if (pts.length === 2) {
-                const label = pts[0].trim();
-                const valor = pts[1].trim();
-                opcoes.push({ 
-                    valor: valor, 
-                    texto: label,
-                    icone: 'ri-capsule-line'
-                });
-                concentracaoMap[valor] = { label, valorNumerico: parseFloat(valor) };
-            }
-        });
+    if (temMultiplas) {
+        const opcoes = [];
+        const assinaturaAtual = concentracaoSelect.getAttribute("data-assinatura");
         
-        // Só popula se houver opções
-        if (opcoes.length > 0) {
-            popularCustomSelect('concentracao', opcoes, (valor) => {
-                calcularSePronto();
+        if (concRaw !== assinaturaAtual) {
+            concRaw.split(";").forEach(g => {
+                const pts = g.split("|");
+                if (pts.length === 2) {
+                    const label = pts[0].trim();
+                    const valor = pts[1].trim();
+                    opcoes.push({ 
+                        valor: valor, 
+                        texto: label,
+                        icone: 'ri-capsule-line'
+                    });
+                    concentracaoMap[valor] = { label, valorNumerico: parseFloat(valor) };
+                }
             });
-            concentracaoSelect.setAttribute("data-assinatura", concRaw);
+            
+            if (opcoes.length > 0) {
+                popularCustomSelect('concentracao', opcoes, (valor) => {
+                    calcularSePronto();
+                });
+                concentracaoSelect.setAttribute("data-assinatura", concRaw);
+            }
+        }
+        
+        concentracaoSelect.style.display = "block";
+        const valorAtual = concentracaoSelect.dataset.valorAtual || '';
+        if (valorAtual) {
+            const span = document.getElementById('concentracaoSelecionada');
+            const opcao = opcoes.find(o => o.valor === valorAtual);
+            if (opcao) span.textContent = opcao.texto;
+        }
+        
+    } else {
+        concentracaoSelect.style.display = "none";
+        concentracaoSelect.removeAttribute("data-assinatura");
+        if (concRaw) {
+            concentracaoMap['unica'] = { 
+                label: concRaw, 
+                valorNumerico: parseFloat(concRaw.match(/(\d+\.?\d*)/)?.[0] || 1) 
+            };
+            const span = document.getElementById('concentracaoSelecionada');
+            if (span) span.textContent = concRaw;
+            concentracaoSelect.dataset.valorAtual = 'unica';
         }
     }
-    
-    concentracaoSelect.style.display = "block";
-    // Atualiza o valor selecionado se existir
-    const valorAtual = concentracaoSelect.dataset.valorAtual || '';
-    if (valorAtual) {
-        const span = document.getElementById('concentracaoSelecionada');
-        const opcao = opcoes.find(o => o.valor === valorAtual);
-        if (opcao) span.textContent = opcao.texto;
-    }
-    
-} else {
-    concentracaoSelect.style.display = "none";
-    concentracaoSelect.removeAttribute("data-assinatura");
-    // Se não tem múltiplas, a concentração é única
-    if (concRaw) {
-        // Guarda como opção única
-        concentracaoMap['unica'] = { 
-            label: concRaw, 
-            valorNumerico: parseFloat(concRaw.match(/(\d+\.?\d*)/)?.[0] || 1) 
-        };
-        // Define como selecionado
-        const span = document.getElementById('concentracaoSelecionada');
-        if (span) span.textContent = concRaw;
-        concentracaoSelect.dataset.valorAtual = 'unica';
-    }
-}
 
     // --- POPULAÇÃO ---
     const populacoesUnicas = [...new Set(baseFiltrada
@@ -872,7 +897,7 @@ if (temMultiplas) {
     } else if (intervalo.simples !== undefined) {
         const opcoes = gerarOpcoesIntervalo(intervalo.simples);
         linhaIntervaloDuplo.style.display = "none";
-        linhaSecundaria.appendChild(intervaloSelectEl); // garante que está na linha partilhada
+        linhaSecundaria.appendChild(intervaloSelectEl);
         if (opcoes.length > 1) {
             popularCustomSelect('intervalo', opcoes, () => calcularSePronto());
             intervaloSelectEl.style.display = "block";
@@ -884,7 +909,7 @@ if (temMultiplas) {
         const opcoesAtaque = gerarOpcoesIntervalo(intervalo.ataque);
         if (intervalo.temDuasFases) {
             const opcoesManut = gerarOpcoesIntervalo(intervalo.manutencao);
-            linhaIntervaloDuplo.appendChild(intervaloSelectEl); // move para a linha exclusiva dos dois
+            linhaIntervaloDuplo.appendChild(intervaloSelectEl);
             linhaIntervaloDuplo.style.display = "flex";
             popularCustomSelect('intervalo', opcoesAtaque, () => calcularSePronto());
             popularCustomSelect('intervaloManutencao', opcoesManut, () => calcularSePronto());

@@ -1757,6 +1757,42 @@ body.modal-aberto::before {
     gap: 12px;
     width: 100%;
 }
+
+.par-campos.par-unico {
+    grid-template-columns: 1fr;
+}
+
+/* Para dose de ataque + manutenção */
+.par-campos.dose-dupla {
+    grid-template-columns: 1fr 1fr;
+}
+
+/* Responsivo para telas muito pequenas */
+@media (max-width: 480px) {
+    .par-campos {
+        gap: 8px;
+    }
+    
+    .par-campos.dose-dupla {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+}
+
+@media (max-width: 360px) {
+    .par-campos {
+        gap: 6px;
+    }
+    
+    .par-campos.dose-dupla {
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+    }
+}
+
+
+
+
 .par-campos.par-unico {
     grid-template-columns: 1fr;
 }
