@@ -301,17 +301,50 @@ function valorCustomSelect(prefixo) {
 /* ---- 9. FONTE (referência) — msf/oms/angola ---- */
 function selecionarFonte(valor) {
     if (fonteAtual === valor) { fecharTodosCustomSelects(); return; }
-    fonteAtual = valor;
-    document.getElementById('fonteSelecionada').innerHTML =
-        `<i class="${ICONES_FONTE[valor] || 'ri-earth-line'}"></i> ${ROTULOS_FONTE[valor] || valor}`;
-    document.querySelectorAll('#fonteOptions .custom-select-option').forEach(opt => {
-        opt.classList.toggle('selecionado', opt.dataset.value === valor);
-    });
-    fecharTodosCustomSelects();
-    localStorage.setItem('fonte', valor);
-    notaFallback.style.display = 'none';
-    if (inputNome.value.trim() !== "") { escolherLinha('ajuste'); exibirCampos(); }
+    
+    // Mostra feedback de carregamento
+    const nomeFonte = ROTULOS_FONTE[valor] || valor;
+    pResultado.innerHTML = `<div class="feedback-loading"><i class="ri-loader-4-line"></i><span>Carregando padrões da <strong>${nomeFonte}</strong>...</span></div>`;
+    pResultado.style.background = "none";
+    pResultado.style.display = "block";
+    
+    // Atualiza a fonte após o feedback
+    setTimeout(() => {
+        fonteAtual = valor;
+        document.getElementById('fonteSelecionada').innerHTML =
+            `<i class="${ICONES_FONTE[valor] || 'ri-earth-line'}"></i> ${ROTULOS_FONTE[valor] || valor}`;
+        document.querySelectorAll('#fonteOptions .custom-select-option').forEach(opt => {
+            opt.classList.toggle('selecionado', opt.dataset.value === valor);
+        });
+        fecharTodosCustomSelects();
+        localStorage.setItem('fonte', valor);
+        notaFallback.style.display = 'none';
+        
+        // Mostra sucesso
+        pResultado.innerHTML = `<div class="feedback-success"><i class="ri-checkbox-circle-line"></i><span>Padrões da <strong>${nomeFonte}</strong> carregados com sucesso!</span></div>`;
+        
+        // Limpa os campos
+        inputNome.value = "";
+        inputs.peso.value = "";
+        inputs.idade.value = "";
+        inputs.dosagem.value = "";
+        inputs.dosagemManutencao.value = "";
+        medAtivo = null;
+        exibirCampos();
+        
+        // Esconde o feedback após 2 segundos
+        setTimeout(() => {
+            pResultado.innerHTML = "";
+            pResultado.style.display = "none";
+        }, 2000);
+    }, 300);
 }
+
+
+
+
+
+
 
 /* ---- 10. UNIDADE DE IDADE ---- */
 function toggleTempLocalSelect(event) {
@@ -348,38 +381,88 @@ document.getElementById('tempLocalSelect').dataset.valorAtual = '365';
 /* ---- 11. SUGESTÕES ---- */
 function gerirSugestoes() {
     const termo = inputNome.value.trim().toLowerCase();
-    if (!termo) { divSugestoes.style.display = "none"; divSugestoes.innerHTML = ""; return; }
+    if (!termo) { 
+        divSugestoes.style.display = "none"; 
+        divSugestoes.innerHTML = ""; 
+        return; 
+    }
 
-    let baseTotal = bancoDados[fonteAtual] || [];
+    // Recolhe nomes de TODAS as fontes carregadas
     const todosNomes = [];
-    baseTotal.forEach(m => {
-        if (Array.isArray(m.nome)) m.nome.forEach(n => { if (n.toLowerCase().includes(termo)) todosNomes.push(n); });
-        else if (m.nome && String(m.nome).toLowerCase().includes(termo)) todosNomes.push(String(m.nome).trim());
+    Object.keys(bancoDados).forEach(fonte => {
+        const base = bancoDados[fonte] || [];
+        base.forEach(m => {
+            if (Array.isArray(m.nome)) {
+                m.nome.forEach(n => {
+                    if (n.toLowerCase().includes(termo)) {
+                        todosNomes.push({
+                            nome: n,
+                            fonte: fonte
+                        });
+                    }
+                });
+            } else if (m.nome && String(m.nome).toLowerCase().includes(termo)) {
+                todosNomes.push({
+                    nome: String(m.nome).trim(),
+                    fonte: fonte
+                });
+            }
+        });
     });
 
-    const nomesFiltrados = [...new Set(todosNomes)].sort((a, b) => {
-        const aL = a.toLowerCase(), bL = b.toLowerCase();
-        const aC = aL.startsWith(termo), bC = bL.startsWith(termo);
+    // Remove duplicados, mantendo a primeira ocorrência (prioridade à fonte atual)
+    const vistos = new Set();
+    const nomesUnicos = [];
+    // Primeiro adiciona os da fonte atual (prioridade)
+    const daFonteAtual = todosNomes.filter(item => item.fonte === fonteAtual);
+    const deOutrasFontes = todosNomes.filter(item => item.fonte !== fonteAtual);
+    
+    [...daFonteAtual, ...deOutrasFontes].forEach(item => {
+        const chave = item.nome.toLowerCase();
+        if (!vistos.has(chave)) {
+            vistos.add(chave);
+            nomesUnicos.push(item);
+        }
+    });
+
+    // Ordena: primeiro os que começam com o termo
+    nomesUnicos.sort((a, b) => {
+        const aL = a.nome.toLowerCase();
+        const bL = b.nome.toLowerCase();
+        const aC = aL.startsWith(termo);
+        const bC = bL.startsWith(termo);
         if (aC && !bC) return -1;
         if (!aC && bC) return 1;
         return aL.localeCompare(bL);
     });
 
-    if (nomesFiltrados.length === 0) { divSugestoes.style.display = "none"; return; }
+    if (nomesUnicos.length === 0) { 
+        divSugestoes.style.display = "none"; 
+        return; 
+    }
 
     divSugestoes.innerHTML = "";
     divSugestoes.style.display = "block";
-    nomesFiltrados.slice(0, 6).forEach(nome => {
-        const item = document.createElement("div");
-        item.className = "sugestao_item";
+    
+    nomesUnicos.slice(0, 6).forEach(item => {
+        const div = document.createElement("div");
+        div.className = "sugestao_item";
+        
+        // Destaca o termo no nome
+        const nome = item.nome;
         const index = nome.toLowerCase().indexOf(termo);
-        item.innerHTML = `${nome.substring(0, index)}<strong>${nome.substring(index, index + termo.length)}</strong>${nome.substring(index + termo.length)}`;
-        item.onclick = () => {
+        div.innerHTML = `
+            ${nome.substring(0, index)}<strong>${nome.substring(index, index + termo.length)}</strong>${nome.substring(index + termo.length)}
+            ${item.fonte !== fonteAtual ? `<span style="font-size:0.6rem;opacity:0.5;margin-left:6px;">(${ROTULOS_FONTE[item.fonte] || item.fonte})</span>` : ''}
+        `;
+        
+        div.onclick = () => {
             inputNome.value = nome;
             divSugestoes.style.display = "none";
-            escolherLinha('silencioso'); exibirCampos();
+            escolherLinha('silencioso');
+            exibirCampos();
         };
-        divSugestoes.appendChild(item);
+        divSugestoes.appendChild(div);
     });
 }
 
@@ -390,7 +473,11 @@ document.addEventListener('click', (e) => {
 /* ---- 12. ESCOLHER LINHA — com fallback para qualquer outra fonte que tenha o medicamento ---- */
 function escolherLinha(modo) {
     const nome = inputNome.value.trim().toLowerCase();
-    if (!nome) { medAtivo = null; notaFallback.style.display = "none"; return; }
+    if (!nome) { 
+        medAtivo = null; 
+        notaFallback.style.display = "none"; 
+        return; 
+    }
 
     let filtradas = (bancoDados[fonteAtual] || []).filter(m => nomeCorresponde(m, nome));
     notaFallback.style.display = "none";
@@ -405,24 +492,36 @@ function escolherLinha(modo) {
             const fonteEncontrada = outrasFontesComOMedicamento[0];
             const fonteAntiga = fonteAtual;
             filtradas = bancoDados[fonteEncontrada].filter(m => nomeCorresponde(m, nome));
-            fonteAtual = fonteEncontrada;
-
+            
+            // Mostra feedback de mudança de referência
             const rotuloAntigo = ROTULOS_FONTE[fonteAntiga] || fonteAntiga;
             const rotuloNovo = ROTULOS_FONTE[fonteEncontrada] || fonteEncontrada;
-            notaFallback.innerHTML = `<i class="ri-information-line"></i><span>"${inputNome.value.trim()}" não está disponível para a referência "${rotuloAntigo}". O sistema mudou para a referência "${rotuloNovo}".</span>`;
-            notaFallback.style.display = "flex";
-
-            // sincroniza o select de fonte visualmente, sem disparar recalculo (já estamos a calcular)
+            
+            // Atualiza a fonte silenciosamente
+            fonteAtual = fonteEncontrada;
+            
+            // Sincroniza o select de fonte visualmente
             const spanFonte = document.getElementById('fonteSelecionada');
             if (spanFonte) spanFonte.innerHTML = `<i class="${ICONES_FONTE[fonteEncontrada] || 'ri-earth-line'}"></i> ${rotuloNovo}`;
             document.querySelectorAll('#fonteOptions .custom-select-option').forEach(opt => {
                 opt.classList.toggle('selecionado', opt.dataset.value === fonteEncontrada);
             });
+            
+            // Mostra a nota de fallback
+            notaFallback.innerHTML = `<i class="ri-information-line"></i><span>"${inputNome.value.trim()}" não está disponível para a referência "${rotuloAntigo}". O sistema mudou para a referência "${rotuloNovo}".</span>`;
+            notaFallback.style.display = "flex";
+            
+            // Salva a nova fonte
+            localStorage.setItem('fonte', fonteEncontrada);
         }
     }
 
-    if (filtradas.length === 0) { medAtivo = null; return; }
+    if (filtradas.length === 0) { 
+        medAtivo = null; 
+        return; 
+    }
 
+    // Aplica os filtros adicionais (população, via, condição, etc.)
     const populacaoSel = valorCustomSelect('populacao').toLowerCase();
     const viaSel = valorCustomSelect('via').toLowerCase();
     const condicaoSel = valorCustomSelect('condicao').toLowerCase();
@@ -431,17 +530,33 @@ function escolherLinha(modo) {
     const fatorIdade = parseFloat(document.getElementById('tempLocalSelect').dataset.valorAtual) || 365;
     const idadeDias = idadeVal * fatorIdade;
 
-    if (condicaoSel) { const t = filtradas.filter(m => String(m.condicao || "").toLowerCase().trim() === condicaoSel); if (t.length) filtradas = t; }
-    if (populacaoSel) { const t = filtradas.filter(m => String(m.populacao || "").toLowerCase().trim() === populacaoSel); if (t.length) filtradas = t; }
-    if (viaSel) { const t = filtradas.filter(m => String(m.via || "").toLowerCase().trim() === viaSel); if (t.length) filtradas = t; }
-    if (idadeDias > 0) { const t = filtradas.filter(m => dentroDaFaixa(idadeDias, resolverFaixaIdade(m.idade))); if (t.length) filtradas = t; }
-    if (pesoVal > 0) { const t = filtradas.filter(m => dentroDaFaixa(pesoVal, resolverFaixaPeso(m.peso))); if (t.length) filtradas = t; }
+    if (condicaoSel) { 
+        const t = filtradas.filter(m => String(m.condicao || "").toLowerCase().trim() === condicaoSel); 
+        if (t.length) filtradas = t; 
+    }
+    if (populacaoSel) { 
+        const t = filtradas.filter(m => String(m.populacao || "").toLowerCase().trim() === populacaoSel); 
+        if (t.length) filtradas = t; 
+    }
+    if (viaSel) { 
+        const t = filtradas.filter(m => String(m.via || "").toLowerCase().trim() === viaSel); 
+        if (t.length) filtradas = t; 
+    }
+    if (idadeDias > 0) { 
+        const t = filtradas.filter(m => dentroDaFaixa(idadeDias, resolverFaixaIdade(m.idade))); 
+        if (t.length) filtradas = t; 
+    }
+    if (pesoVal > 0) { 
+        const t = filtradas.filter(m => dentroDaFaixa(pesoVal, resolverFaixaPeso(m.peso))); 
+        if (t.length) filtradas = t; 
+    }
 
     medAtivo = filtradas[0];
 
-    if (populacaoSel === 'pediatrica' || (medAtivo.populacao || '').toLowerCase() === 'pediatrica') verificarTetoPediatrico();
+    if (populacaoSel === 'pediatrica' || (medAtivo && medAtivo.populacao && medAtivo.populacao.toLowerCase() === 'pediatrica')) {
+        verificarTetoPediatrico();
+    }
 }
-
 function verificarTetoPediatrico() {
     if (!inputs.idade.value) return;
     const fatorConversao = parseFloat(document.getElementById('tempLocalSelect').dataset.valorAtual) || 365;
