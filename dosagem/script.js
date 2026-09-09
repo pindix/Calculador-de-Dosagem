@@ -304,17 +304,16 @@ function valorCustomSelect(prefixo) {
 
 /* ---- 9. FONTE (referência) — msf/oms/angola ---- */
 function selecionarFonte(valor) {
-    if (fonteAtual === valor) { fecharTodosCustomSelects(); return; }
+    if (fonteAtual === valor) { 
+        fecharTodosCustomSelects(); 
+        return; 
+    }
     
     // Mostra feedback de carregamento
     const nomeFonte = ROTULOS_FONTE[valor] || valor;
     pResultado.innerHTML = `<div class="feedback-loading"><i class="ri-loader-4-line"></i><span>Carregando padrões da <strong>${nomeFonte}</strong>...</span></div>`;
     pResultado.style.background = "none";
     pResultado.style.display = "block";
-
-    // Mostra sucesso
-        pResultado.innerHTML = `<div class="feedback-success"><i class="ri-checkbox-circle-line"></i><span>Padrões da <strong>${nomeFonte}</strong> carregados com sucesso!</span></div>`;
-        
     
     // Atualiza a fonte após o feedback
     setTimeout(() => {
@@ -328,6 +327,8 @@ function selecionarFonte(valor) {
         localStorage.setItem('fonte', valor);
         notaFallback.style.display = 'none';
         
+        // Mostra sucesso (permanente)
+        pResultado.innerHTML = `<div class="feedback-success" id="feedbackSucessoFonte"><i class="ri-checkbox-circle-line"></i><span>Padrões da <strong>${nomeFonte}</strong> carregados com sucesso!</span></div>`;
         
         // Limpa os campos
         inputNome.value = "";
@@ -338,14 +339,10 @@ function selecionarFonte(valor) {
         medAtivo = null;
         exibirCampos();
         
-        // Esconde o feedback após 2 segundos
-        // setTimeout(() => {
-        //     pResultado.innerHTML = "";
-        //     pResultado.style.display = "none";
-        // }, 2000);
-    }, 5000);
-
-    
+        // NÃO remove o feedback automaticamente
+        // A mensagem fica até ser removida pelo limpar() ou pelo input do nome
+        
+    }, 300);
 }
 
 
