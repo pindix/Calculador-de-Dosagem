@@ -1799,3 +1799,100 @@ body.modal-aberto::before {
     padding-top: 8px;
     opacity: 0.85;
 }
+
+
+
+
+
+
+
+
+
+
+/* ==========================================================================
+   CORREÇÃO DOS SELECTS PERSONALIZADOS
+   ========================================================================== */
+
+/* Cada select passa a ser a referência do seu próprio dropdown */
+.custom-select {
+    position: relative;
+    min-width: 0;
+}
+
+/* O menu abre exatamente abaixo do respectivo select */
+.custom-select > .custom-select-options {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    width: 100%;
+    box-sizing: border-box;
+
+    z-index: 99999;
+
+    background: var(--card-bg);
+    border: 1px solid rgba(0, 132, 61, 0.15);
+    border-radius: 12px;
+
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+
+    transition:
+        max-height 0.3s ease,
+        opacity 0.2s ease,
+        visibility 0.2s ease;
+}
+
+/* Estado aberto */
+.custom-select > .custom-select-options.aberto {
+    max-height: 280px;
+    overflow-y: auto;
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Scrollbar pertence ao próprio dropdown */
+.custom-select > .custom-select-options::-webkit-scrollbar {
+    width: 5px;
+}
+
+.custom-select > .custom-select-options::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-select > .custom-select-options::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 10px;
+}
+
+/* Firefox */
+.custom-select > .custom-select-options {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) transparent;
+}
+
+/* Garante que a caixa não corte o dropdown */
+.calculator-box {
+    overflow: visible;
+}
+
+.linha-secundaria,
+#linhaIntervaloDuplo {
+    overflow: visible;
+}
+
+/* Os selects da mesma linha podem ficar acima dos vizinhos
+   quando um dos seus menus estiver aberto */
+.linha-secundaria > .custom-select,
+#linhaIntervaloDuplo > .custom-select {
+    position: relative;
+    z-index: 10;
+}
+
+/* O select aberto fica acima dos restantes */
+.linha-secundaria > .custom-select:has(.custom-select-options.aberto),
+#linhaIntervaloDuplo > .custom-select:has(.custom-select-options.aberto) {
+    z-index: 100;
+}
