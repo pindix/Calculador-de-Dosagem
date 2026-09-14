@@ -1,12 +1,13 @@
 /* ==========================================================================
-   MPINDI TECMED — script.js completo
+   MPINDI TECMED — script.js completo (correção: feedback de fonte
+   separado do resultado, classList de dose sempre limpa, exibirCampos
+   a usar a fonte realmente usada em fallback, concentracaoMap reiniciado)
    ========================================================================== */
 
 /* ---- 1. TEMA ---- */
 const body = document.body;
 const themeBtn = document.getElementById('themeBtn');
 const themeIcon = document.getElementById('themeIcon');
-const concentracaoWrapper = document.getElementById('concentracaoWrapper');
 
 themeBtn.addEventListener('click', () => {
     if (body.getAttribute('data-theme') === 'dark') {
@@ -52,6 +53,11 @@ let medAtivo = null;
 let fonteAtual = 'msf';
 let concentracaoMap = {};
 
+// 🔥 CORREÇÃO: fonte realmente usada para o medicamento em exibição, guardada
+// à parte -- nunca escrita dentro de medAtivo (que é uma referência partilhada
+// para dentro de bancoDados). Fica null quando não há fallback em curso.
+let fonteUsadaAtual = null;
+
 const ROTULOS_FONTE = { msf: 'Médicos Sem Fronteira', oms: 'OMS (Internacional)', angola: 'Angola' };
 const ICONES_FONTE = { msf: 'ri-earth-line', oms: 'ri-earth-line', angola: 'ri-government-line' };
 
@@ -59,6 +65,10 @@ const inputNome = document.getElementById("nome");
 const divSugestoes = document.getElementById("sugestoes_box");
 const pResultado = document.getElementById("resultado");
 const notaFallback = document.getElementById("notaFallbackReferencia");
+// 🔥 NOVO: div própria para o feedback de troca de fonte -- nunca mais
+// partilha espaço com o resultado do cálculo, por isso exibirCampos()
+// já não pode apagá-la sem querer.
+const fonteFeedback = document.getElementById("fonteFeedback");
 
 const inputs = {
     peso: document.getElementById("peso"),
@@ -223,6 +233,14 @@ function formatarFolha(sheet) {
 
 async function carregarDados() {
     try {
+        if (window.BANCO_DADOS && Object.keys(window.BANCO_DADOS).length > 0) {
+            bancoDados = window.BANCO_DADOS;
+            const total = Object.values(bancoDados).reduce((s, l) => s + l.length, 0);
+            console.log(`✅ Base de dados offline pronta (${Object.keys(bancoDados).length} fontes, ${total} registos).`);
+            return;
+        }
+        // Fallback opcional: se por alguma razão o medicamentos.js não carregou
+        console.warn("⚠️ medicamentos.js não encontrado — a tentar via fetch (só funciona em http).");
         const response = await fetch('medicamentos.xlsx?v=' + Math.random());
         const data = await response.arrayBuffer();
         const workbook = XLSX.read(data);
@@ -230,18 +248,17 @@ async function carregarDados() {
         workbook.SheetNames.forEach(nome => {
             bancoDados[nome.toLowerCase().trim()] = formatarFolha(workbook.Sheets[nome]);
         });
-        console.log("✅ Base de dados pronta.");
+        console.log("✅ Base de dados pronta (via Excel).");
     } catch (e) {
-        console.error("❌ Erro ao carregar Excel:", e);
+        console.error("❌ Erro ao carregar base de dados:", e);
     }
 }
-
 function nomeCorresponde(med, nomeBusca) {
     if (Array.isArray(med.nome)) return med.nome.some(n => n.toLowerCase().trim() === nomeBusca);
     return med.nome && String(med.nome).toLowerCase().trim() === nomeBusca;
 }
 
-/* ---- 8. CUSTOM SELECT — genérico, para via/intervalo/população/condição/etc ---- */
+/* ---- 8. CUSTOM SELECT — genérico ---- */
 function toggleCustomSelect(id) {
     const wrapper = document.getElementById(id);
     if (!wrapper) return;
@@ -259,7 +276,6 @@ function fecharTodosCustomSelects() {
     document.querySelectorAll('.custom-select-trigger-temp.aberto').forEach(t => t.classList.remove('aberto'));
 }
 
-// Clicar fora de qualquer select customizado fecha o que estiver aberto
 document.addEventListener('click', (e) => {
     if (!e.target.closest('.custom-select') && !e.target.closest('.custom-select-temp-local')) {
         fecharTodosCustomSelects();
@@ -302,55 +318,40 @@ function valorCustomSelect(prefixo) {
     return wrapper ? (wrapper.dataset.valorAtual || '') : '';
 }
 
-/* ---- 9. FONTE (referência) — msf/oms/angola ---- */
+/* ---- 9. FONTE (referência) — feedback numa div própria, persistente até
+   se digitar um novo medicamento ou se limpar ---- */
 function selecionarFonte(valor) {
-    if (fonteAtual === valor) { 
-        fecharTodosCustomSelects(); 
-        return; 
-    }
-    
-    // Mostra feedback de carregamento
+    if (fonteAtual === valor) { fecharTodosCustomSelects(); return; }
+
     const nomeFonte = ROTULOS_FONTE[valor] || valor;
-    pResultado.innerHTML = `<div class="feedback-loading"><i class="ri-loader-4-line"></i><span>Carregando padrões da <strong>${nomeFonte}</strong>...</span></div>`;
-    pResultado.style.background = "none";
-    pResultado.style.display = "block";
-    
-    // Fecha as sugestões
+    fonteFeedback.innerHTML = `<div class="feedback-loading"><i class="ri-loader-4-line"></i><span>Carregando padrões da <strong>${nomeFonte}</strong>...</span></div>`;
+    fonteFeedback.style.display = "block";
+
     divSugestoes.style.display = "none";
     divSugestoes.innerHTML = "";
-    
-    // Atualiza a fonte após o feedback
+
     setTimeout(() => {
         fonteAtual = valor;
         document.getElementById('fonteSelecionada').innerHTML =
-            `<i class="${ICONES_FONTE[valor] || 'ri-earth-line'}"></i> ${ROTULOS_FONTE[valor] || valor}`;
+            `<i class="${ICONES_FONTE[valor] || 'ri-earth-line'}"></i> ${nomeFonte}`;
         document.querySelectorAll('#fonteOptions .custom-select-option').forEach(opt => {
             opt.classList.toggle('selecionado', opt.dataset.value === valor);
         });
         fecharTodosCustomSelects();
         localStorage.setItem('fonte', valor);
         notaFallback.style.display = 'none';
-        
-        // Mostra sucesso (permanente)
-        pResultado.innerHTML = `<div class="feedback-success" id="feedbackSucessoFonte"><i class="ri-checkbox-circle-line"></i><span>Padrões da <strong>${nomeFonte}</strong> carregados com sucesso!</span></div>`;
-        
-        // Limpa os campos
+
+        // Sucesso persistente -- só desaparece quando o utilizador digitar
+        // um medicamento novo ou carregar em Limpar (ver gatilhos abaixo)
+        fonteFeedback.innerHTML = `<div class="feedback-success"><i class="ri-checkbox-circle-line"></i><span>Padrões da <strong>${nomeFonte}</strong> carregados com sucesso!</span></div>`;
+
         inputNome.value = "";
-        inputs.peso.value = "";
-        inputs.idade.value = "";
-        inputs.dosagem.value = "";
-        inputs.dosagemManutencao.value = "";
-        medAtivo = null;
+        inputs.peso.value = ""; inputs.idade.value = "";
+        inputs.dosagem.value = ""; inputs.dosagemManutencao.value = "";
+        medAtivo = null; fonteUsadaAtual = null;
         exibirCampos();
-        
     }, 500);
 }
-
-
-
-
-
-
 
 /* ---- 10. UNIDADE DE IDADE ---- */
 function toggleTempLocalSelect(event) {
@@ -380,220 +381,100 @@ document.getElementById('tempLocalSelect').dataset.valorAtual = '365';
 
 
 /* ==========================================================================
-   PARTE 2 — sugestões, escolherLinha (com fallback multi-fonte),
-   exibirCampos (disposição), modal, calcular(), notas com "ver mais"
+   PARTE 2
    ========================================================================== */
 
 /* ---- 11. SUGESTÕES ---- */
 function gerirSugestoes() {
     const termo = inputNome.value.trim().toLowerCase();
-    if (!termo) { 
-        divSugestoes.style.display = "none"; 
-        divSugestoes.innerHTML = ""; 
-        return; 
-    }
+    if (!termo) { divSugestoes.style.display = "none"; divSugestoes.innerHTML = ""; return; }
 
-    // Recolhe nomes de TODAS as fontes carregadas
     const todosNomes = [];
     Object.keys(bancoDados).forEach(fonte => {
-        const base = bancoDados[fonte] || [];
-        base.forEach(m => {
+        (bancoDados[fonte] || []).forEach(m => {
             if (Array.isArray(m.nome)) {
-                m.nome.forEach(n => {
-                    if (n.toLowerCase().includes(termo)) {
-                        todosNomes.push({
-                            nome: n,
-                            fonte: fonte
-                        });
-                    }
-                });
+                m.nome.forEach(n => { if (n.toLowerCase().includes(termo)) todosNomes.push({ nome: n, fonte }); });
             } else if (m.nome && String(m.nome).toLowerCase().includes(termo)) {
-                todosNomes.push({
-                    nome: String(m.nome).trim(),
-                    fonte: fonte
-                });
+                todosNomes.push({ nome: String(m.nome).trim(), fonte });
             }
         });
     });
 
-    // Remove duplicados (mesmo nome, mesma fonte)
     const vistos = new Set();
     const nomesUnicos = [];
     todosNomes.forEach(item => {
         const chave = `${item.nome.toLowerCase()}|${item.fonte}`;
-        if (!vistos.has(chave)) {
-            vistos.add(chave);
-            nomesUnicos.push(item);
-        }
+        if (!vistos.has(chave)) { vistos.add(chave); nomesUnicos.push(item); }
     });
 
-    // Ordena: primeiro os que começam com o termo
     nomesUnicos.sort((a, b) => {
-        const aL = a.nome.toLowerCase();
-        const bL = b.nome.toLowerCase();
-        const aC = aL.startsWith(termo);
-        const bC = bL.startsWith(termo);
+        const aL = a.nome.toLowerCase(), bL = b.nome.toLowerCase();
+        const aC = aL.startsWith(termo), bC = bL.startsWith(termo);
         if (aC && !bC) return -1;
         if (!aC && bC) return 1;
         return aL.localeCompare(bL);
     });
 
-    if (nomesUnicos.length === 0) { 
-        divSugestoes.style.display = "none"; 
-        return; 
-    }
+    if (nomesUnicos.length === 0) { divSugestoes.style.display = "none"; return; }
 
-    // Separa por fonte
     const daFonteAtual = nomesUnicos.filter(item => item.fonte === fonteAtual);
     const deOutrasFontes = nomesUnicos.filter(item => item.fonte !== fonteAtual);
 
     divSugestoes.innerHTML = "";
     divSugestoes.style.display = "block";
-    divSugestoes.style.cssText = `
-        display: block;
-        background: var(--card-bg);
-        border-radius: 16px;
-        box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-        overflow: hidden;
-        padding: 8px 0;
-        max-height: 320px;
-        overflow-y: auto;
-    `;
 
-    // Estilo iOS para cada item
-    const estiloItem = `
-        padding: 12px 16px;
-        cursor: pointer;
-        transition: background 0.15s ease;
-        border-bottom: 1px solid rgba(0,0,0,0.04);
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-    `;
-
-    // Container para os items (com scroll)
     const container = document.createElement('div');
-    container.style.cssText = `
-        max-height: 320px;
-        overflow-y: auto;
-        position: relative;
-    `;
+    container.style.cssText = `max-height: 320px; overflow-y: auto; position: relative;`;
 
-    // Primeiro: resultados da fonte atual
-    daFonteAtual.slice(0, 6).forEach((item, index) => {
+    function criarItem(item, opaco) {
         const div = document.createElement("div");
         const nome = item.nome;
         const indexHighlight = nome.toLowerCase().indexOf(termo);
         const rotuloFonte = ROTULOS_FONTE[item.fonte] || item.fonte;
-        
-        div.style.cssText = estiloItem;
-        div.style.borderBottom = index === daFonteAtual.slice(0,6).length - 1 && deOutrasFontes.length === 0 
-            ? 'none' 
-            : '1px solid rgba(0,0,0,0.04)';
-        
+        div.style.cssText = `padding:12px 16px;cursor:pointer;transition:background .15s ease;border-bottom:1px solid rgba(0,0,0,.04);display:flex;flex-direction:column;gap:2px;`;
+        if (opaco) div.style.opacity = "0.7";
         div.innerHTML = `
-            <div style="font-weight:500;font-size:0.95rem;color:var(--text);line-height:1.3;">
+            <div style="font-weight:${opaco ? 400 : 500};font-size:${opaco ? '0.9rem' : '0.95rem'};color:var(--text);line-height:1.3;">
                 ${nome.substring(0, indexHighlight)}<strong style="color:var(--primary);">${nome.substring(indexHighlight, indexHighlight + termo.length)}</strong>${nome.substring(indexHighlight + termo.length)}
             </div>
-            <div style="font-size:0.6rem;color:var(--text);opacity:0.4;letter-spacing:0.3px;">
-               Referência: ${rotuloFonte}
-            </div>
-        `;
-        
+            <div style="font-size:0.6rem;color:var(--text);opacity:0.4;letter-spacing:0.3px;">Referência: ${rotuloFonte}</div>`;
         div.onmouseenter = () => { div.style.background = 'rgba(0, 132, 61, 0.05)'; };
         div.onmouseleave = () => { div.style.background = 'transparent'; };
-        
         div.onclick = () => {
             inputNome.value = nome;
             divSugestoes.style.display = "none";
-            escolherLinha('silencioso');
-            exibirCampos();
+            escolherLinha('silencioso'); exibirCampos();
         };
-        container.appendChild(div);
-    });
+        return div;
+    }
 
-    // Se houver resultados de outras fontes, adiciona cabeçalho sticky
+    daFonteAtual.slice(0, 6).forEach(item => container.appendChild(criarItem(item, false)));
+
     if (deOutrasFontes.length > 0) {
-        // Cabeçalho sticky
-        const stickyHeader = document.createElement("div");
-        stickyHeader.style.cssText = `
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            background: var(--card-bg);
-            padding: 10px 16px 8px 16px;
-            border-bottom: 1px solid rgba(0,0,0,0.06);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        `;
-        stickyHeader.innerHTML = `
-            <span style="flex:1;height:1px;background:rgba(0,0,0,0.08);"></span>
-            <span style="font-size:0.55rem;font-weight:600;color:#999;text-transform:uppercase;letter-spacing:0.8px;">Outras referências</span>
-            <span style="flex:1;height:1px;background:rgba(0,0,0,0.08);"></span>
-        `;
-        container.appendChild(stickyHeader);
-
-        // Depois: resultados de outras fontes (mais suaves)
-        deOutrasFontes.slice(0, 6).forEach((item, index) => {
-            const div = document.createElement("div");
-            const nome = item.nome;
-            const indexHighlight = nome.toLowerCase().indexOf(termo);
-            const rotuloFonte = ROTULOS_FONTE[item.fonte] || item.fonte;
-            
-            div.style.cssText = estiloItem;
-            div.style.opacity = "0.7";
-            div.style.borderBottom = index === deOutrasFontes.slice(0,6).length - 1 
-                ? 'none' 
-                : '1px solid rgba(0,0,0,0.03)';
-            
-            div.innerHTML = `
-                <div style="font-weight:400;font-size:0.9rem;color:var(--text);line-height:1.3;">
-                    ${nome.substring(0, indexHighlight)}<strong style="color:var(--primary);font-weight:500;">${nome.substring(indexHighlight, indexHighlight + termo.length)}</strong>${nome.substring(indexHighlight + termo.length)}
-                </div>
-                <div style="font-size:0.55rem;color:var(--text);opacity:0.3;letter-spacing:0.3px;">
-                   Referência: ${rotuloFonte}
-                </div>
-            `;
-            
-            div.onmouseenter = () => { div.style.background = 'rgba(0, 132, 61, 0.03)'; };
-            div.onmouseleave = () => { div.style.background = 'transparent'; };
-            
-            div.onclick = () => {
-                inputNome.value = nome;
-                divSugestoes.style.display = "none";
-                escolherLinha('silencioso');
-                exibirCampos();
-            };
-            container.appendChild(div);
-        });
+        const sticky = document.createElement("div");
+        sticky.style.cssText = `position:sticky;top:0;z-index:10;background:var(--card-bg);padding:10px 16px 8px;border-bottom:1px solid rgba(0,0,0,.06);display:flex;align-items:center;gap:10px;`;
+        sticky.innerHTML = `<span style="flex:1;height:1px;background:rgba(0,0,0,.08);"></span><span style="font-size:.55rem;font-weight:600;color:#999;text-transform:uppercase;letter-spacing:.8px;">Outras referências</span><span style="flex:1;height:1px;background:rgba(0,0,0,.08);"></span>`;
+        container.appendChild(sticky);
+        deOutrasFontes.slice(0, 6).forEach(item => container.appendChild(criarItem(item, true)));
     }
 
     divSugestoes.appendChild(container);
 }
 
-
 document.addEventListener('click', (e) => {
     if (!inputNome.contains(e.target) && !divSugestoes.contains(e.target)) divSugestoes.style.display = "none";
 });
 
-/* ---- 12. ESCOLHER LINHA — com fallback para qualquer outra fonte que tenha o medicamento ---- */
+/* ---- 12. ESCOLHER LINHA — fallback multi-fonte, sem tocar em medAtivo ---- */
 function escolherLinha(modo) {
     const nome = inputNome.value.trim().toLowerCase();
-    if (!nome) { 
-        medAtivo = null; 
-        notaFallback.style.display = "none"; 
-        return; 
-    }
+    if (!nome) { medAtivo = null; fonteUsadaAtual = null; notaFallback.style.display = "none"; return; }
 
     let filtradas = (bancoDados[fonteAtual] || []).filter(m => nomeCorresponde(m, nome));
     notaFallback.style.display = "none";
-
-    // Guarda a fonte original (a que o utilizador selecionou)
-    const fonteOriginal = fonteAtual;
+    fonteUsadaAtual = fonteAtual;
 
     if (filtradas.length === 0) {
-        // Procura em QUALQUER outra fonte carregada que tenha o medicamento
         const outrasFontesComOMedicamento = Object.keys(bancoDados)
             .filter(f => f !== fonteAtual)
             .filter(f => bancoDados[f].some(m => nomeCorresponde(m, nome)));
@@ -601,48 +482,24 @@ function escolherLinha(modo) {
         if (outrasFontesComOMedicamento.length > 0) {
             const fonteEncontrada = outrasFontesComOMedicamento[0];
             filtradas = bancoDados[fonteEncontrada].filter(m => nomeCorresponde(m, nome));
-            
-            const rotuloOriginal = ROTULOS_FONTE[fonteOriginal] || fonteOriginal;
+            fonteUsadaAtual = fonteEncontrada;
+
+            const rotuloOriginal = ROTULOS_FONTE[fonteAtual] || fonteAtual;
             const rotuloEncontrado = ROTULOS_FONTE[fonteEncontrada] || fonteEncontrada;
-            
-            // NÃO muda a fonteAtual! Mantém a original.
-            // Só guarda a fonte encontrada para uso interno
-            const fonteUsada = fonteEncontrada;
-            
-            // Mostra a nota de fallback (PERMANENTE)
             notaFallback.innerHTML = `<i class="ri-information-line"></i><span>"${inputNome.value.trim()}" não está disponível para a referência "${rotuloOriginal}". A dose apresentada é baseada na referência "${rotuloEncontrado}".</span>`;
             notaFallback.style.display = "flex";
-            
-            // Guarda que estamos a usar uma fonte diferente
-            medAtivo = filtradas[0];
-            medAtivo._fonteUsada = fonteUsada; // marca que veio de outra fonte
-            medAtivo._fonteOriginal = fonteOriginal;
-            
-            // Aplica os filtros adicionais
-            aplicarFiltrosAdicionais();
-            return;
         }
     }
 
-    if (filtradas.length === 0) { 
-        medAtivo = null; 
-        notaFallback.style.display = "none";
-        return; 
-    }
+    if (filtradas.length === 0) { medAtivo = null; fonteUsadaAtual = null; notaFallback.style.display = "none"; return; }
 
-    // Se chegou aqui, o medicamento existe na fonte atual
     medAtivo = filtradas[0];
-    medAtivo._fonteUsada = fonteAtual;
-    medAtivo._fonteOriginal = fonteAtual;
-    
-    // Aplica os filtros adicionais
     aplicarFiltrosAdicionais();
 }
 
-// Função auxiliar para aplicar os filtros (evita duplicação)
 function aplicarFiltrosAdicionais() {
     if (!medAtivo) return;
-    
+
     const populacaoSel = valorCustomSelect('populacao').toLowerCase();
     const viaSel = valorCustomSelect('via').toLowerCase();
     const condicaoSel = valorCustomSelect('condicao').toLowerCase();
@@ -651,43 +508,26 @@ function aplicarFiltrosAdicionais() {
     const fatorIdade = parseFloat(document.getElementById('tempLocalSelect').dataset.valorAtual) || 365;
     const idadeDias = idadeVal * fatorIdade;
 
-    let filtradas = [medAtivo];
+    // 🔥 CORREÇÃO: procura a linha correspondente na fonte REALMENTE usada
+    // (fonteUsadaAtual), não sempre em fonteAtual -- é o que estava a fazer
+    // condição/população/via desaparecerem durante o fallback.
+    let filtradas = (bancoDados[fonteUsadaAtual || fonteAtual] || [])
+        .filter(m => nomeCorresponde(m, inputNome.value.trim().toLowerCase()));
+    if (filtradas.length === 0) filtradas = [medAtivo];
 
-    if (condicaoSel) { 
-        const t = filtradas.filter(m => String(m.condicao || "").toLowerCase().trim() === condicaoSel); 
-        if (t.length) filtradas = t; 
-    }
-    if (populacaoSel) { 
-        const t = filtradas.filter(m => String(m.populacao || "").toLowerCase().trim() === populacaoSel); 
-        if (t.length) filtradas = t; 
-    }
-    if (viaSel) { 
-        const t = filtradas.filter(m => String(m.via || "").toLowerCase().trim() === viaSel); 
-        if (t.length) filtradas = t; 
-    }
-    if (idadeDias > 0) { 
-        const t = filtradas.filter(m => dentroDaFaixa(idadeDias, resolverFaixaIdade(m.idade))); 
-        if (t.length) filtradas = t; 
-    }
-    if (pesoVal > 0) { 
-        const t = filtradas.filter(m => dentroDaFaixa(pesoVal, resolverFaixaPeso(m.peso))); 
-        if (t.length) filtradas = t; 
-    }
+    if (condicaoSel) { const t = filtradas.filter(m => String(m.condicao || "").toLowerCase().trim() === condicaoSel); if (t.length) filtradas = t; }
+    if (populacaoSel) { const t = filtradas.filter(m => String(m.populacao || "").toLowerCase().trim() === populacaoSel); if (t.length) filtradas = t; }
+    if (viaSel) { const t = filtradas.filter(m => String(m.via || "").toLowerCase().trim() === viaSel); if (t.length) filtradas = t; }
+    if (idadeDias > 0) { const t = filtradas.filter(m => dentroDaFaixa(idadeDias, resolverFaixaIdade(m.idade))); if (t.length) filtradas = t; }
+    if (pesoVal > 0) { const t = filtradas.filter(m => dentroDaFaixa(pesoVal, resolverFaixaPeso(m.peso))); if (t.length) filtradas = t; }
 
     medAtivo = filtradas[0] || medAtivo;
 
     if (populacaoSel === 'pediatrica' || (medAtivo && medAtivo.populacao && medAtivo.populacao.toLowerCase() === 'pediatrica')) {
         verificarTetoPediatrico();
     }
-    
-    // Se estamos a usar uma fonte diferente, mostra a nota (caso tenha sido removida)
-    if (medAtivo && medAtivo._fonteUsada && medAtivo._fonteUsada !== fonteAtual) {
-        const rotuloOriginal = ROTULOS_FONTE[medAtivo._fonteOriginal] || medAtivo._fonteOriginal;
-        const rotuloUsado = ROTULOS_FONTE[medAtivo._fonteUsada] || medAtivo._fonteUsada;
-        notaFallback.innerHTML = `<i class="ri-information-line"></i><span>"${inputNome.value.trim()}" não está disponível para a referência "${rotuloOriginal}". A dose apresentada é baseada na referência "${rotuloUsado}".</span>`;
-        notaFallback.style.display = "flex";
-    }
 }
+
 function verificarTetoPediatrico() {
     if (!inputs.idade.value) return;
     const fatorConversao = parseFloat(document.getElementById('tempLocalSelect').dataset.valorAtual) || 365;
@@ -699,7 +539,7 @@ function verificarTetoPediatrico() {
     }
 }
 
-/* ---- 13. EXIBIR CAMPOS — disposição em pares/linhas partilhadas ---- */
+/* ---- 13. EXIBIR CAMPOS ---- */
 function exibirCampos() {
     if (!medAtivo) {
         inputs.peso.value = ""; inputs.idade.value = "";
@@ -716,80 +556,71 @@ function exibirCampos() {
 
     const linhaNova = exibirCampos._linhaAnterior !== medAtivo;
     exibirCampos._linhaAnterior = medAtivo;
+    if (linhaNova) concentracaoMap = {}; // 🔥 nunca acumula entre medicamentos
 
     // --- PAR PESO / IDADE ---
     parPesoIdade.style.display = "grid";
     const temPeso = medAtivo.peso && medAtivo.peso.trim() !== "";
     const temIdade = medAtivo.idade && medAtivo.idade.trim() !== "";
-    
     campoPeso.style.display = temPeso ? "flex" : "none";
     campoIdade.style.display = temIdade ? "flex" : "none";
-    
-    // Se só um campo estiver visível, ocupa toda a largura
-    if (temPeso && !temIdade) {
-        parPesoIdade.classList.add('par-unico');
-        parPesoIdade.classList.remove('dose-dupla');
-    } else if (!temPeso && temIdade) {
-        parPesoIdade.classList.add('par-unico');
-        parPesoIdade.classList.remove('dose-dupla');
-    } else {
-        parPesoIdade.classList.remove('par-unico');
-        parPesoIdade.classList.remove('dose-dupla');
-    }
+    parPesoIdade.classList.remove('par-unico', 'dose-dupla');
+    if (temPeso !== temIdade) parPesoIdade.classList.add('par-unico');
 
     // --- PAR DOSE / DOSE MANUTENÇÃO ---
     const dose = interpretarDoseOuIntervalo(medAtivo.dose);
     const temDose = medAtivo.dose && medAtivo.dose.trim() !== "";
     const temDoseManutencao = dose.temDuasFases && dose.manutencao && dose.manutencao.trim() !== "";
 
+    // 🔥 CORREÇÃO: limpa sempre as duas classes primeiro -- antes só uma
+    // era adicionada e a outra nunca removida, deixando as duas coexistirem
+    // ao trocar de um medicamento com ataque/manutenção para um simples.
+    parDose.classList.remove('par-unico', 'dose-dupla');
+
     if (!temDose) {
         parDose.style.display = "none";
     } else {
         parDose.style.display = "grid";
-        parDose.classList.remove('par-unico');
-        
+
         if (temDoseManutencao) {
-            // Duas doses: ataque + manutenção
             campoDosagem.style.display = "flex";
             campoDosagemManutencao.style.display = "flex";
             parDose.classList.add('dose-dupla');
             labelDosagem.textContent = "Dose (ataque)";
-            
+
             const partesAtaque = dose.ataque.split(',').map(p => p.trim());
             if (linhaNova && !inputs.dosagem.value) inputs.dosagem.value = partesAtaque[2] || '';
             txtUnidadeDosagem.innerText = partesAtaque[3] || '';
-            
+
             const partesManut = dose.manutencao.split(',').map(p => p.trim());
             if (linhaNova && !inputs.dosagemManutencao.value) inputs.dosagemManutencao.value = partesManut[2] || '';
             txtUnidadeDosagemManutencao.innerText = partesManut[3] || '';
-            
+
         } else if (dose.simples !== undefined && dose.simples !== '') {
-            // Dose única
             campoDosagem.style.display = "flex";
             campoDosagemManutencao.style.display = "none";
             parDose.classList.add('par-unico');
             labelDosagem.textContent = "Dose";
-            
+
             const partes = dose.simples.split(',').map(p => p.trim());
             if (linhaNova && !inputs.dosagem.value) inputs.dosagem.value = partes[2] || '';
             txtUnidadeDosagem.innerText = partes[3] || '';
-            
+
         } else {
-            // Fallback: dose simples (sem ataque/manutencao explícito)
             campoDosagem.style.display = "flex";
             campoDosagemManutencao.style.display = "none";
             parDose.classList.add('par-unico');
             labelDosagem.textContent = "Dose";
-            
+
             const partes = dose.ataque.split(',').map(p => p.trim());
             if (linhaNova && !inputs.dosagem.value) inputs.dosagem.value = partes[2] || '';
             txtUnidadeDosagem.innerText = partes[3] || '';
         }
     }
 
-    // --- CONDIÇÃO ---
+    // --- CONDIÇÃO / POPULAÇÃO / VIA (usam a fonte realmente usada) ---
     const nomeMedicamento = inputNome.value.trim().toLowerCase();
-    let baseFiltrada = (bancoDados[fonteAtual] || []).filter(m => nomeCorresponde(m, nomeMedicamento));
+    let baseFiltrada = (bancoDados[fonteUsadaAtual || fonteAtual] || []).filter(m => nomeCorresponde(m, nomeMedicamento));
     const condicoesUnicas = [...new Set(baseFiltrada.map(m => m.condicao).filter(c => c && String(c).trim() !== ""))];
     const condicaoSelectEl = document.getElementById('condicaoSelect');
     if (condicoesUnicas.length > 1) {
@@ -808,46 +639,26 @@ function exibirCampos() {
     if (temMultiplas) {
         const opcoes = [];
         const assinaturaAtual = concentracaoSelect.getAttribute("data-assinatura");
-        
         if (concRaw !== assinaturaAtual) {
             concRaw.split(";").forEach(g => {
                 const pts = g.split("|");
                 if (pts.length === 2) {
-                    const label = pts[0].trim();
-                    const valor = pts[1].trim();
-                    opcoes.push({ 
-                        valor: valor, 
-                        texto: label,
-                        icone: 'ri-capsule-line'
-                    });
+                    const label = pts[0].trim(), valor = pts[1].trim();
+                    opcoes.push({ valor, texto: label, icone: 'ri-capsule-line' });
                     concentracaoMap[valor] = { label, valorNumerico: parseFloat(valor) };
                 }
             });
-            
             if (opcoes.length > 0) {
-                popularCustomSelect('concentracao', opcoes, (valor) => {
-                    calcularSePronto();
-                });
+                popularCustomSelect('concentracao', opcoes, () => calcularSePronto());
                 concentracaoSelect.setAttribute("data-assinatura", concRaw);
             }
         }
-        
         concentracaoSelect.style.display = "block";
-        const valorAtual = concentracaoSelect.dataset.valorAtual || '';
-        if (valorAtual) {
-            const span = document.getElementById('concentracaoSelecionada');
-            const opcao = opcoes.find(o => o.valor === valorAtual);
-            if (opcao) span.textContent = opcao.texto;
-        }
-        
     } else {
         concentracaoSelect.style.display = "none";
         concentracaoSelect.removeAttribute("data-assinatura");
         if (concRaw) {
-            concentracaoMap['unica'] = { 
-                label: concRaw, 
-                valorNumerico: parseFloat(concRaw.match(/(\d+\.?\d*)/)?.[0] || 1) 
-            };
+            concentracaoMap['unica'] = { label: concRaw, valorNumerico: parseFloat(concRaw.match(/(\d+\.?\d*)/)?.[0] || 1) };
             const span = document.getElementById('concentracaoSelecionada');
             if (span) span.textContent = concRaw;
             concentracaoSelect.dataset.valorAtual = 'unica';
@@ -865,7 +676,7 @@ function exibirCampos() {
         popularCustomSelect('populacao', populacoesUnicas.map(p => {
             const v = String(p).trim().toLowerCase();
             return { valor: v, texto: rotulosPop[v] || v, icone: iconesPop[v] || 'ri-user-line' };
-        }), (valor) => { verificarTetoPediatrico(); escolherLinha('ajuste'); exibirCampos(); });
+        }), () => { verificarTetoPediatrico(); escolherLinha('ajuste'); exibirCampos(); });
         populacaoSelectEl.style.display = "block";
     } else {
         populacaoSelectEl.style.display = "none";
@@ -1042,32 +853,25 @@ function calcular() {
     }
 
     let concentracao = 1, textoExibido, indiceConcentracao = null;
-const valorSelecionado = concentracaoSelect.dataset.valorAtual || '';
-
-if (valorSelecionado && concentracaoMap[valorSelecionado]) {
-    const dados = concentracaoMap[valorSelecionado];
-    textoExibido = dados.label;
-    concentracao = dados.valorNumerico || 1;
-    // Para o índice, precisamos da posição
-    const opcoes = concentracaoSelect.querySelectorAll('.custom-select-option');
-    let idx = 0;
-    opcoes.forEach((opt, i) => {
-        if (opt.dataset.value === valorSelecionado) idx = i + 1;
-    });
-    indiceConcentracao = idx || null;
-} else {
-    // Fallback: tentar extrair da string
-    const concStr = String(medAtivo.concentracao || "").trim();
-    if (concStr.includes("|")) {
-        const pts = concStr.split("|");
-        textoExibido = pts[0].trim();
-        concentracao = parseFloat(pts[1]) || 1;
+    const valorSelecionado = concentracaoSelect.dataset.valorAtual || '';
+    if (valorSelecionado && concentracaoMap[valorSelecionado]) {
+        const dados = concentracaoMap[valorSelecionado];
+        textoExibido = dados.label;
+        concentracao = dados.valorNumerico || 1;
+        const opcoes = concentracaoSelect.querySelectorAll('.custom-select-option');
+        let idx = 0;
+        opcoes.forEach((opt, i) => { if (opt.dataset.value === valorSelecionado) idx = i + 1; });
+        indiceConcentracao = idx || null;
     } else {
-        const matchNumero = concStr.match(/(\d+\.?\d*)/);
-        textoExibido = concStr;
-        concentracao = matchNumero ? parseFloat(matchNumero[0]) : 1;
+        const concStr = String(medAtivo.concentracao || "").trim();
+        if (concStr.includes("|")) {
+            const pts = concStr.split("|");
+            textoExibido = pts[0].trim(); concentracao = parseFloat(pts[1]) || 1;
+        } else {
+            const matchNumero = concStr.match(/(\d+\.?\d*)/);
+            textoExibido = concStr; concentracao = matchNumero ? parseFloat(matchNumero[0]) : 1;
+        }
     }
-}
 
     function validarDose(inputEl, doseString, rotulo) {
         if (!doseString || inputEl.value === "") return;
@@ -1109,11 +913,12 @@ if (valorSelecionado && concentracaoMap[valorSelecionado]) {
     const intervaloSelectEl = document.getElementById('intervaloSelect');
     const intervaloManutSelectEl = document.getElementById('intervaloManutencaoSelect');
     const opcoesAtaqueAtuais = gerarOpcoesIntervalo(intervalo.simples !== undefined ? intervalo.simples : intervalo.ataque);
+    let opcaoIntervaloAtiva = null;
     if (opcoesAtaqueAtuais.length > 0) {
         const valSel = valorCustomSelect('intervalo') || opcoesAtaqueAtuais[0].valor;
         const opSel = opcoesAtaqueAtuais.find(o => o.valor === valSel) || opcoesAtaqueAtuais[0];
         iAtaque = opSel.vezesDia;
-        var opcaoIntervaloAtiva = opSel;
+        opcaoIntervaloAtiva = opSel;
     }
     if (intervalo.temDuasFases && intervaloManutSelectEl.style.display !== "none") {
         const opcoesManut = gerarOpcoesIntervalo(intervalo.manutencao);
@@ -1175,7 +980,6 @@ if (valorSelecionado && concentracaoMap[valorSelecionado]) {
             }
         }
 
-        // --- NOTAS (com [N], destaque, referência sempre visível, "ver mais") ---
         const notasTexto = String(medAtivo.adicionais || "");
         let notas = [];
         function filtrarNotaPorConcentracao(texto, indiceSelecionado) {
@@ -1212,19 +1016,16 @@ if (valorSelecionado && concentracaoMap[valorSelecionado]) {
         }
 
         if (notas.length > 0) {
-            // A última nota é sempre a referência (Referencia: manual, página, vinda da
-            // coluna 'nota') -- se existir, mostra-se sempre, fora do "ver mais".
             const referencia = String(medAtivo.nota || "").trim();
-            const notasComColapso = notas;
-            const excedeLimite = notasComColapso.length > MAX_NOTAS_VISIVEIS;
+            const excedeLimite = notas.length > MAX_NOTAS_VISIVEIS;
 
             resultadoHTML += `<div class="dosagem-notas"><div class="notas-titulo"><i class="ri-information-fill"></i><span>Informações Adicionais</span></div>`;
-            notasComColapso.forEach((n, i) => {
+            notas.forEach((n, i) => {
                 const oculta = excedeLimite && i >= MAX_NOTAS_VISIVEIS ? ' nota-oculta' : '';
                 resultadoHTML += `<div class="nota-item${oculta}"><i class="ri-information-line"></i><span>${n}</span></div>`;
             });
             if (excedeLimite) {
-                resultadoHTML += `<button class="btn-ver-mais-notas" onclick="alternarNotasOcultas(this)"><i class="ri-arrow-down-s-line"></i> Ver mais (${notasComColapso.length - MAX_NOTAS_VISIVEIS})</button>`;
+                resultadoHTML += `<button class="btn-ver-mais-notas" onclick="alternarNotasOcultas(this)"><i class="ri-arrow-down-s-line"></i> Ver mais (${notas.length - MAX_NOTAS_VISIVEIS})</button>`;
             }
             if (referencia) {
                 resultadoHTML += `<div class="nota-item nota-referencia"><i class="ri-book-open-line"></i><span>${referencia}</span></div>`;
@@ -1275,11 +1076,15 @@ function limpar() {
     pResultado.classList.remove("vibrar"); void pResultado.offsetWidth; pResultado.classList.add("vibrar");
     inputNome.value = ""; inputs.peso.value = ""; inputs.idade.value = "";
     inputs.dosagem.value = ""; inputs.dosagemManutencao.value = "";
-    medAtivo = null; exibirCampos(); pResultado.innerHTML = "";
+    medAtivo = null; fonteUsadaAtual = null;
+    exibirCampos(); pResultado.innerHTML = "";
+    fonteFeedback.style.display = "none"; fonteFeedback.innerHTML = ""; // 🔥 limpa também o feedback da fonte
 }
 
 inputNome.addEventListener("input", () => {
     const valor = inputNome.value.trim();
+    // 🔥 o feedback de sucesso da fonte desaparece assim que se começa a digitar
+    fonteFeedback.style.display = "none"; fonteFeedback.innerHTML = "";
     if (valor.length > 0) {
         escolherLinha('silencioso');
         if (medAtivo) { divSugestoes.style.display = "none"; exibirCampos(); }
@@ -1314,5 +1119,7 @@ window.addEventListener('load', () => {
     if (temaSalvo === 'dark') { body.setAttribute('data-theme', 'dark'); if (themeIcon) themeIcon.className = 'ri-sun-line'; }
     const fonteSalva = localStorage.getItem('fonte');
     if (fonteSalva && ROTULOS_FONTE[fonteSalva]) selecionarFonte(fonteSalva);
-    carregarDados();
+    carregarDados().then(() => {
+    console.log("🚀 Aplicação pronta.");
+});
 });
