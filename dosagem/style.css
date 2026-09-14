@@ -1716,12 +1716,10 @@ body.modal-aberto::before {
 
 
 /* ==========================================================================
-   ACRESCENTOS DESTA RONDA — nada acima desta linha foi alterado
+   ACRESCENTOS — nada acima desta linha foi alterado
    ========================================================================== */
 
-/* --- Generaliza o valor/seta de QUALQUER custom-select novo (via,
-   intervalo, população, condição, intervalo-manutenção), sem precisar de
-   uma regra por ID como acontecia só para #fonteSelecionada/#faixaSelecionada --- */
+/* --- Generaliza o valor/seta de QUALQUER custom-select novo --- */
 .custom-select-trigger > span:not(.floating-label) {
     font-size: 0.78rem;
     font-weight: 500;
@@ -1757,17 +1755,14 @@ body.modal-aberto::before {
     width: 100%;
 }
 
-/* Quando tem apenas 1 campo visível */
 .par-campos.par-unico {
     grid-template-columns: 1fr;
 }
 
-/* Quando tem dose de ataque + manutenção (2 campos) */
 .par-campos.dose-dupla {
     grid-template-columns: 1fr 1fr;
 }
 
-/* Responsivo */
 @media (max-width: 480px) {
     .par-campos {
         gap: 8px;
@@ -1780,8 +1775,7 @@ body.modal-aberto::before {
     }
 }
 
-/* --- Linha partilhada via/intervalo/população: flex, reparte o espaço
-   automaticamente pelos que estiverem com display diferente de none --- */
+/* --- Linha partilhada via/intervalo/população --- */
 .linha-secundaria {
     display: flex;
     gap: 10px;
@@ -1805,7 +1799,7 @@ body.modal-aberto::before {
     min-width: 0;
 }
 
-/* --- Nota de fallback de referência (entre a calculator-box e o resultado) --- */
+/* --- Nota de fallback de referência --- */
 .nota-fallback-referencia {
     width: 100%;
     max-width: 470px;
@@ -1831,7 +1825,7 @@ body.modal-aberto::before {
     background: rgba(230, 126, 34, 0.12);
 }
 
-/* --- Notas: "ver mais" quando há muitos parágrafos --- */
+/* --- Notas: "ver mais" --- */
 .nota-item.nota-oculta {
     display: none;
 }
@@ -1857,7 +1851,18 @@ body.modal-aberto::before {
     opacity: 0.85;
 }
 
-
 .custom-select {
     position: relative;
+}
+
+/* --- Wrapper da nova div de feedback de fonte (separada do resultado) ---
+   Reaproveita .feedback-loading/.feedback-success já existentes, só
+   dá a largura/posição certas dentro do fluxo da página --- */
+.fonte-feedback-wrapper {
+    width: 90%;
+    margin: 0 auto 8px;
+}
+.fonte-feedback-wrapper .feedback-loading,
+.fonte-feedback-wrapper .feedback-success {
+    width: 100%;
 }
