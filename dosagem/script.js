@@ -317,6 +317,7 @@ function selecionarFonte(valor) {
     if (fonteAtual === valor) { fecharTodosCustomSelects(); return; }
 
     const nomeFonte = ROTULOS_FONTE[valor] || valor;
+    fecharTodosCustomSelects();
     fonteFeedback.innerHTML = `<div class="feedback-loading"><i class="ri-loader-4-line"></i><span>Carregando padrões da <strong>${nomeFonte}</strong>...</span></div>`;
     fonteFeedback.style.display = "block";
 
@@ -334,8 +335,6 @@ function selecionarFonte(valor) {
         localStorage.setItem('fonte', valor);
         notaFallback.style.display = 'none';
 
-        // Sucesso persistente -- só desaparece quando o utilizador digitar
-        // um medicamento novo ou carregar em Limpar (ver gatilhos abaixo)
         fonteFeedback.innerHTML = `<div class="feedback-success"><i class="ri-checkbox-circle-line"></i><span>Padrões da <strong>${nomeFonte}</strong> carregados com sucesso!</span></div>`;
 
         inputNome.value = "";
@@ -343,9 +342,8 @@ function selecionarFonte(valor) {
         inputs.dosagem.value = ""; inputs.dosagemManutencao.value = "";
         medAtivo = null; fonteUsadaAtual = null;
         exibirCampos();
-    }, 500);
+    }, 1000);
 }
-
 /* ---- 10. UNIDADE DE IDADE ---- */
 function toggleTempLocalSelect(event) {
     event.stopPropagation();
