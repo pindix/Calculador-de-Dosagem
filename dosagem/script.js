@@ -1006,6 +1006,20 @@ function calcular() {
             }
         }
 
+        if (mostrarTotais && horas !== null && mlValues.length > 0 && horas < 24) {
+            const tomasPorDia = 24 / horas;
+            const volumeMl = parseFloat(mlValues[0]);
+            const volumePorDia = volumeMl * tomasPorDia;
+            resultadoHTML += `<div class="dosagem-totais">
+                <div class="total-item"><i class="ri-repeat-line"></i><span>${formatarNumero(tomasPorDia)} toma(s)/dia</span></div>
+                <div class="total-item"><i class="ri-drop-line"></i><span>${formatarNumero(volumePorDia)} mL/dia</span></div>`;
+            if (concentracao > 0) {
+                resultadoHTML += `<div class="total-item"><i class="ri-scales-2-line"></i><span>${formatarNumero(volumeMl * concentracao * tomasPorDia)} mg/dia</span></div>`;
+            }
+            resultadoHTML += `</div>`;
+        }
+
+        
         if (notas.length > 0) {
             const referencia = String(medAtivo.nota || "").trim();
             const excedeLimite = notas.length > MAX_NOTAS_VISIVEIS;
@@ -1024,18 +1038,6 @@ function calcular() {
             resultadoHTML += `</div>`;
         }
 
-        if (mostrarTotais && horas !== null && mlValues.length > 0 && horas < 24) {
-            const tomasPorDia = 24 / horas;
-            const volumeMl = parseFloat(mlValues[0]);
-            const volumePorDia = volumeMl * tomasPorDia;
-            resultadoHTML += `<div class="dosagem-totais">
-                <div class="total-item"><i class="ri-repeat-line"></i><span>${formatarNumero(tomasPorDia)} toma(s)/dia</span></div>
-                <div class="total-item"><i class="ri-drop-line"></i><span>${formatarNumero(volumePorDia)} mL/dia</span></div>`;
-            if (concentracao > 0) {
-                resultadoHTML += `<div class="total-item"><i class="ri-scales-2-line"></i><span>${formatarNumero(volumeMl * concentracao * tomasPorDia)} mg/dia</span></div>`;
-            }
-            resultadoHTML += `</div>`;
-        }
 
         resultadoHTML += `</div></div>`;
         pResultado.innerHTML = resultadoHTML;
